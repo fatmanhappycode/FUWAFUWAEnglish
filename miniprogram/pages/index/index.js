@@ -1,5 +1,10 @@
 //index.js
 const app = getApp()
+let plugin = requirePlugin("myPlugin");
+let manager = plugin.getSoeRecorderManager({
+  secretId: 'AKIDhky3NZGAvsg0EJmxx1xmR2ticVQCAIhx',
+  secretKey: 'MfrwqZDi4K3d5VoBTgonfvEPWbO4RgIi'
+});
 
 Page({
   data: {
@@ -11,11 +16,56 @@ Page({
   },
 
   onLoad: function() {
+    manager.onSuccess((res) => {
+      //打印识别结果
+      console.log(res);
+    });
+    manager.onError((res) => {
+      console.log(res)
+    });
     wx.vrequest({
-      url: 'http://www.subtitlesearch.xyz:8080/getVideo',
+      url: 'http://47.101.58.51:8080/getVideo',
       method: 'POST',
       dataType: 'json',
       data: 'vName=狮子王&time=00:00:50',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      success: function (res) {
+        console.log(res);
+      }
+    });
+
+    wx.vrequest({
+      url: 'http://47.101.58.51:8080/subtitles',
+      method: 'POST',
+      dataType: 'json',
+      data: 'searchTitle=我&pn=1&vName=狮子王&lang=Zh',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      success: function (res) {
+        console.log(res);
+      }
+    });
+    wx.vrequest({
+      url: 'http://47.101.58.51:8080/videos',
+      method: 'POST',
+      dataType: 'json',
+      data: 'searchTitle=你妈的&pn=1&lang=Zh&videoType=',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      success: function (res) {
+        console.log(res);
+      }
+    });
+
+    wx.vrequest({
+      url: 'http://47.101.58.51:8080/getHint',
+      method: 'POST',
+      dataType: 'json',
+      data: 'searchTitle=我一会&lang=Zh',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -81,52 +131,16 @@ Page({
 
   // 上传图片
   doUpload: function () {
-    // 选择图片
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success: function (res) {
-
-        wx.showLoading({
-          title: '上传中',
-        })
-
-        const filePath = res.tempFilePaths[0]
-        
-        // 上传图片
-        const cloudPath = 'my-image' + filePath.match(/\.[^.]+?$/)[0]
-        wx.cloud.uploadFile({
-          cloudPath,
-          filePath,
-          success: res => {
-            console.log('[上传文件] 成功：', res)
-
-            app.globalData.fileID = res.fileID
-            app.globalData.cloudPath = cloudPath
-            app.globalData.imagePath = filePath
-            
-            wx.navigateTo({
-              url: '../storageConsole/storageConsole'
-            })
-          },
-          fail: e => {
-            console.error('[上传文件] 失败：', e)
-            wx.showToast({
-              icon: 'none',
-              title: '上传失败',
-            })
-          },
-          complete: () => {
-            wx.hideLoading()
-          }
-        })
-
-      },
-      fail: e => {
-        console.error(e)
-      }
-    })
+    manager.start({
+      content: 'you jump, i jump',
+      evalMode:1
+    });
   },
 
-})
+  stop:function() {
+    manager.stop();
+  },
+  result: function() {
+    console.log("1");
+  }
+});

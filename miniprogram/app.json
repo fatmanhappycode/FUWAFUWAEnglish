@@ -9,5 +9,11 @@
     "navigationBarTitleText": "云开发 QuickStart",
     "navigationBarTextStyle": "black"
   },
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "plugins": {
+    "myPlugin": {
+      "version": "1.1.1",
+      "provider": "wxe5a00a1780c8eb95"
+    }
+  }
 }

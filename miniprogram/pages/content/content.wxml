@@ -1,0 +1,59 @@
+<view class="container" bindtap='hideWay'>
+  <text class='top-title'>SubtitleSearch</text>
+  <text class='search-title'>{{searchTitle}}</text>
+  <text class='search-translate'>{{translateTitle}}</text>
+  <view>
+    <view wx:for="{{list}}" class='movie-content'>
+      <view class='per-paragraph'>
+        <view catchtap='chooseWay' class='img-container'>
+          <view class='info-view {{showStatus}}'>
+            <text>影片的集数和时间</text>
+            <text>影片名</text>
+          </view>
+          <image class='movie-img' src='{{list[index].image}}'></image>
+          <view class='handle-view {{showStatus}}'>
+            <text class='icon-image' catchtap='getPerImg'></text>
+            <text class='icon-film' catchtap='getRealVideo'></text>
+          </view>
+        </view>
+        <view class='text-view'>
+          <text class='movie-text'>{{list[index].sSubtitleZh}}</text>
+          <text class='movie-text'>{{list[index].sSubtitleEn}}</text>
+          <button class='icon-microphone' bindtouchstart='startRecord' bindtouchend='uploadRecord' data-testId="{{list[index].sSubtitleEn}}">长按英文跟读评分</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 每帧图片窗口 -->
+    <view class='per-image' wx:if="getImg">
+      <text class='movie-name'></text>
+      <text class='close-window' catchtap='closeWindow'>X</text>
+      <view wx:for="{{list.result}}">
+        <image src='list.result[index].image'></image>
+        <text class='text-zh'>{{list.result[index].sSubtitleZh}}</text>
+        <text class='text-en'>{{list.result[index].sSubtitleEn}}</text>
+      </view>
+    </view>
+
+    <!-- 视频窗口 -->
+    <view class='per-video' wx:if="getVideo">
+      <text class='movie-name'></text>
+      <text class='close-window' catchtap='closeWindow'>X</text>
+    </view>
+
+    <!-- 录音窗口 -->
+    <view class='recording' wx:if="{{isRecord}}">
+      <text class='icon-microphone recording-icon'></text>
+      <text class='in-recording'>{{recordStatus}}</text>
+    </view>
+
+    <!-- 评分窗口 -->
+    <view class='' wx:if="{{scoreShow}}">
+      <text>你的分数是{{score}}</text>
+      <text>{{scoreComment}}</text>
+      <text class='close-window' catchtap='closeWindow'></text>
+    </view>
+
+  </view>
+
+</view>

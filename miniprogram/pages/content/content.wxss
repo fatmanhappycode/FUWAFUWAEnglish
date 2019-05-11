@@ -1,0 +1,120 @@
+.icon-film,.icon-image{
+  display: inline-block;
+  width: 90rpx;
+  height: 90rpx;
+  margin: 1rem;
+  border: 2rpx solid white;
+  border-radius: 50%;
+  font-size: 60rpx;
+  color: white;
+}
+
+.top-title{
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.movie-content{
+  width: 90%;
+  text-align: center;
+}
+
+.movie-text{
+  display: inline-block;
+  width: 100%;
+}
+
+.img-container{
+  position: relative;
+  width: 14rem;
+}
+
+.movie-img{
+  width: 100%;
+  padding:8rpx;
+  border: 5rpx double black;
+}
+
+
+.info-view{
+  opacity: 0;
+  position: absolute;
+  top: 0rpx;
+  width: 100%;
+  height: 0%;
+  background-color: rgba(102,102,102,0.5);
+}
+
+.handle-view{
+  opacity: 0;
+  position: absolute;
+  bottom: 0rpx;
+  width: 100%;
+  height: 0%;
+  background-color: rgba(255,102,102,0.5);
+}
+
+
+.showChoose{
+  animation: show 0.4s 1;
+  animation-fill-mode:forwards;
+}
+
+.hideChoose{
+  animation: hide 0.4s 1;
+  animation-fill-mode:forwards;
+}
+
+@keyframes show{
+  from{
+    opacity: 0;
+    height: 0%;
+  }
+  to{
+    opacity: 1;
+    height: 50%;
+  }
+}
+
+@keyframes hide{
+  from{
+    opacity: 1;
+    height: 50%;
+  }
+  to{
+    opacity: 0;
+    height: 0%;
+  }
+}
+
+.text-view{
+  padding: 1rem;
+  width: 100%;
+  background-color: rgba(204,204,204,0.5);
+}
+
+.icon-microphone{
+  font-size:1rem;
+  padding:18rpx;
+}
+
+/* 录音窗口 */
+.recording{
+  position:fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.recording-icon{
+  font-size: 3rem;
+  color: rgb(0,192,0)
+}
+
+
+.in-recording{
+  font-size: 1.5rem;
+}

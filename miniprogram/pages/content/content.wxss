@@ -98,8 +98,15 @@
   padding:18rpx;
 }
 
-/* 录音窗口 */
-.recording{
+/* 窗口关闭按钮 */
+.close-window{
+  position: absolute;
+  right: 10rpx;
+  top: 10rpx;
+}
+
+/* 弹出窗口 */
+.out-window{
   position:fixed;
   display: flex;
   flex-direction: column;
@@ -107,6 +114,20 @@
   top: 20%;
   left: 50%;
   transform: translateX(-50%);
+}
+
+/* 每帧图片窗口 */
+.per-image{
+
+}
+/* 视频窗口 */
+.per-video{
+
+}
+
+/* 录音窗口 */
+.recording{
+  
 }
 
 .recording-icon{
@@ -117,4 +138,9 @@
 
 .in-recording{
   font-size: 1.5rem;
+}
+
+/* 评分窗口 */
+.grading{
+
 }

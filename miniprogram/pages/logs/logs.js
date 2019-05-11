@@ -76,7 +76,9 @@ Page({
   searchMovie:function(){
     //判断是否为空
     if(this.data.searchWord===""){
-
+      this.setData({
+        searchTip:'不能搜索空内容'
+      })
     }
     else{
         //标记为当前是搜索状态
@@ -142,6 +144,7 @@ Page({
       }
     })
   },
+  //下一页
   nextPage:function(){
     var language;
     if (this.data.languageBtn = '英语') {
@@ -159,6 +162,30 @@ Page({
       },
       success: function (res) {
         res=res.extend.result
+        this.setData({
+          page: res.pageNum,
+          totalPage: res.pages,
+          count: res.total,
+          previousPageClass: res.hasPreviousPage ? "page-btn" : "page-btn no-page",
+          nextPageClass: res.hasNextPage ? "page-btn" : "page-btn no-page",
+          navigatepageNums: res.navigatepageNums,
+          list: res.list
+        })
+      }
+    })
+  },
+  //跳转到某一页
+  toPage:function(event){
+    var item = event.currentTarget.dataset.testid;
+    wx.request({
+      url:"",
+      data: {
+        searchTitle: this.data.searchWord,
+        pageNum: item,
+        lange: language
+      },
+      success:function(res){
+        res = res.extend.result
         this.setData({
           page: res.pageNum,
           totalPage: res.pages,

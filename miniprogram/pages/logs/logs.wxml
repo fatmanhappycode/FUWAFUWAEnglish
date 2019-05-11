@@ -40,7 +40,7 @@
     <view class='page-choose'>
       <button class='{{previousPageClass}}' bindtap='lastPage'>上一页</button>
       <view wx:for="{{navigatepageNums}}">
-        <button class='page-text'>{{item}}</button>
+        <button class='page-text' bindtap='toPage' data-testId="{{item}}">{{item}}</button>
       </view>
       <button class='{{nextPageClass}}' bindtap='nextPage'>下一页</button>
     </view>

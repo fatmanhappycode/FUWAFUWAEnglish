@@ -7,13 +7,13 @@
       <view class='per-paragraph'>
         <view catchtap='chooseWay' class='img-container'>
           <view class='info-view {{showStatus}}'>
-            <text>影片的集数和时间</text>
-            <text>影片名</text>
+            <text>{{list.result[index].sTime}}</text>
+            <text>{{list.result[index].vName}}</text>
           </view>
           <image class='movie-img' src='{{list[index].image}}'></image>
           <view class='handle-view {{showStatus}}'>
             <text class='icon-image' catchtap='getPerImg'></text>
-            <text class='icon-film' catchtap='getRealVideo'></text>
+            <text class='icon-film' catchtap='getRealVideo' data-testId="{{list[index]}}"></text>
           </view>
         </view>
         <view class='text-view'>
@@ -25,7 +25,7 @@
     </view>
 
     <!-- 每帧图片窗口 -->
-    <view class='per-image' wx:if="getImg">
+    <view class='per-image out-window' wx:if="{{getImg}}">
       <text class='movie-name'></text>
       <text class='close-window' catchtap='closeWindow'>X</text>
       <view wx:for="{{list.result}}">
@@ -36,24 +36,26 @@
     </view>
 
     <!-- 视频窗口 -->
-    <view class='per-video' wx:if="getVideo">
-      <text class='movie-name'></text>
+    <view class='per-video out-window' wx:if="{{getVideo}}">
+      <text class='movie-name'>{{vName}}</text>
       <text class='close-window' catchtap='closeWindow'>X</text>
+      <video src='../../img/214.mp4'></video>
     </view>
 
     <!-- 录音窗口 -->
-    <view class='recording' wx:if="{{isRecord}}">
+    <view class='recording out-window' wx:if="{{isRecord}}">
       <text class='icon-microphone recording-icon'></text>
       <text class='in-recording'>{{recordStatus}}</text>
     </view>
 
     <!-- 评分窗口 -->
-    <view class='' wx:if="{{scoreShow}}">
+    <view class='grading out-window' wx:if="{{scoreShow}}">
       <text>你的分数是{{score}}</text>
       <text>{{scoreComment}}</text>
       <text class='close-window' catchtap='closeWindow'></text>
     </view>
 
   </view>
+
 
 </view>

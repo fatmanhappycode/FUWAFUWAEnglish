@@ -8,11 +8,13 @@ Page({
     searchTitle:"",
     translateTitle:"", // 翻译后的内容，音标或者翻译
     lang:"",
-    vName:"",
+    vUrl:"", // 要播放视频的url
     list:[{
       image:"../../img/avtar.jpg",
       sSubtitleZh:'这里',
-      sSubtitleEn:'here'
+      sSubtitleEn:'here',
+      vName:"",
+      sTime:""
     }],
     showStatus:"",
     showWay:"showChoose",
@@ -45,9 +47,22 @@ Page({
     })
   }, 
   //让视频窗口跳出
-  getRealVideo: function () {
+  getRealVideo: function (event) {
+    var list = event.currentTarget.dataset.testid
     this.setData({
       getVideo: true
+    })
+    wx.request({
+      url: '',
+      data:{
+        vName:list.vName,
+        time:list.sTime
+      },
+      success: function (res) {
+        this.setData({
+          vUrl:res.extend.result
+        })
+      }
     })
   },
   //关闭跳出来的窗口

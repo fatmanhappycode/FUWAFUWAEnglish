@@ -92,14 +92,16 @@ Page({
           language="Zh"
         }
         //对搜索对应内容的请求
-        wx.request({
-          url:"",
-          data:{
-            searchTitle: this.data.searchWord,
-            pn: this.data.page,
-            lange: language
+        wx.vrequest({
+          url:"http://47.101.58.51:8080/videos",
+          method: 'POST',
+          dataType: 'json',
+          data: 'searchTitle=' + this.data.searchWord + '&pn=' + this.data.page + '&lang=' + language+'&videoType=',
+          header: {
+            'Content-Type': 'application/x-www-form-urlencoded'
           },
           success: function (res) {
+            console.log(res);
             res = res.extend.result
             this.setData({
               page:res.extend.result.pageNum,

@@ -1,6 +1,11 @@
 //index.js
 //获取应用实例
 const app = getApp()
+let plugin = requirePlugin("myPlugin");
+let manager = plugin.getSoeRecorderManager({
+  secretId: 'AKIDhky3NZGAvsg0EJmxx1xmR2ticVQCAIhx',
+  secretKey: 'MfrwqZDi4K3d5VoBTgonfvEPWbO4RgIi'
+});
 
 Page({
   data: {

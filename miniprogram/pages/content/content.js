@@ -152,10 +152,13 @@ Page({
   wordsRequest: function (word){
     let that=this;
     wx.vrequest({
-      url: 'http://dict-co.iciba.com/api/dictionary.php?',
-      data: 'w=' + word +'&type=json&key=32B25A29CBE2D70D4E1DA12036763605',
+      url: 'http://dict-co.iciba.com/api/dictionary.php?key=32B25A29CBE2D70D4E1DA12036763605',
       method: 'POST',
       dataType: 'json',
+      data: 'type=json&w=' + word ,
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       success: function (res) {
         console.log(res)
         that.setData({

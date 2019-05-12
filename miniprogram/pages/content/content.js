@@ -29,22 +29,37 @@ Page({
     recordStatus: "正在录音", // 录音状态
     recodePath: "", // 录音存放路径
     frontImg:"", // 三帧图片的第一张
-    behindImg: "" // 三帧图片的最后一张
+    behindImg: "", // 三帧图片的最后一张
+    hasNextPage: false,
+    hasPreviousPage: false,
+    pageNum: 1,
+    navigatepageNums: [],
+    aniFlag:[false,false,false,false,false,false,false,false,false]
   },
   //点击跳出图片和视频图标提供选择
-  chooseWay:function(){
+  chooseWay:function(event){
+    let index = event.currentTarget.dataset.testid;
+    let aniFlag=this.data.aniFlag;
+    aniFlag[index]=true
     this.setData({
-      showStatus:this.data.showWay
+      showStatus:this.data.showWay,
+      aniFlag: aniFlag
     })
   },
   //再点一次关闭图片和视频图标选择
   hideWay: function () {
     this.setData({
       showStatus: this.data.hideWay
-    })
+    });
+    let that=this;
+    setTimeout(function(){
+      that.setData({
+        aniFlag: [false, false, false, false, false, false, false, false, false]
+      })
+    },500)
   },
   //让每帧图片窗口跳出
-  getPerImg:function(){
+  getPerImg:function(event){
     var list = event.currentTarget.dataset.testid;
     let img=list.image;
     let imgArr=img.split('/');
@@ -65,20 +80,23 @@ Page({
     this.setData({
       getVideo: true
     })
-    wx.request({
-      url: '',
-      method:'post',
-      dataType:'json',
-      data:{
-        vName:list.vName,
-        time:list.sTime
+    let that=this;
+    wx.vrequest({
+      url: 'http://47.101.58.51:8080/getVideo',
+      method: 'POST',
+      dataType: 'json',
+      data: `vName=${list.vName}&time=${list.sTime}`,
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
       success: function (res) {
-        this.setData({
+        console.log(res);
+        that.setData({
           vUrl:res.extend.result
         })
       }
-    })
+    });
+
   },
   //关闭跳出来的窗口
   closeWindow:function(){
@@ -89,13 +107,15 @@ Page({
     })
   },
   //开始录音
-  startRecord: function () {
+  startRecord: function (event) {
     this.setData({
       isRecord: true,
       recordStatus: "正在录音"
     })
+    let content = event.currentTarget.dataset.testid;
+    console.log('content   :    '+content)
     manager.start({
-      content: 'you jump, i jump',
+      content: content,
       evalMode: 1
     });
   },
@@ -130,27 +150,31 @@ Page({
   },
   // 单词请求音标
   wordsRequest: function (word){
-    wx.request({
-      url: 'http://dict-co.iciba.com/api/dictionary.php?w='+word+'&type=json&key=32B25A29CBE2D70D4E1DA12036763605',
-      data: '',
+    let that=this;
+    wx.vrequest({
+      url: 'http://dict-co.iciba.com/api/dictionary.php?',
+      data: 'w=' + word +'&type=json&key=32B25A29CBE2D70D4E1DA12036763605',
       method: 'POST',
       dataType: 'json',
-      success: function(res) {
-        this.setData({
-          translateTitle:res.ph_en
+      success: function (res) {
+        console.log(res)
+        that.setData({
+          translateTitle:res.data.symbols[0].ph_en
         })
       }
     })
   },
   //句子请求翻译
   sentenceRequest: function (str){
-    wx.request({
-      url: 'url:http://fanyi.baidu.com/transapi?from=auto&to=cht&query='+str,
-      data: '',
+    let that=this;
+    wx.vrequest({
+      url: 'http://fanyi.baidu.com/transapi',
+      data: 'from=auto&to=cht&query=' + str,
       method: 'POST',
       dataType: 'json',
       success: function (res) {
-        this.setData({
+        console.log(res)
+        that.setData({
           translateTitle: res.data.dst
         })
        }
@@ -169,28 +193,39 @@ Page({
     this.setData({
       vName:options.vName,
       lang:options.lang,
-      searchTitle:options.searchTitle
+      searchTitle:options.searchTitle,
     })
+    let data = `searchTitle=${this.data.searchTitle}&pn=1&vName=${this.data.vName}&lang=${this.data.lang}`
+    console.log(data);
     //使用上个页面传过来的搜索字符串进行请求
-    wx.request({
-      url: "",
-      data: {
-        searchTitle: options.searchTitle,
-        lang: options.lang,
-        vName:options.vName
+    wx.vrequest({
+      url: 'http://47.101.58.51:8080/subtitles',
+      method: 'POST',
+      dataType: 'json',
+      data:data,
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
       success: function (res) {
-        res = res.extend.result
-        this.setData({
-          list:res.list,
+        console.log(res)
+        res = res.data.extend.result;
+        that.setData({
+          list: res.list,
+          hasNextPage: res.hasNextPage,
+          hasPreviousPage:res.hasPreviousPage,
+          pageNum:res.pageNum,
+          navigatepageNums: res.navigatepageNums
         })
+
       }
-    })
-    //判断为单词还是句子
-    let str = options.searchTitle.trim();
-    if (str.replace(/^[A-Za-z]+$/, "")=="")// 为单词
-      this.wordsRequest(str);
-    else
-      this.sentenceRequest(str);
+    });
+    if(options.lang=='En'){
+      //判断为单词还是句子
+      let str = options.searchTitle.trim();
+      if (str.replace(/^[A-Za-z]+$/, "")=="")// 为单词
+        this.wordsRequest(str);
+      else
+        this.sentenceRequest(str);
+    }
   }
 })

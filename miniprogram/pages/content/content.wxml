@@ -3,60 +3,70 @@
   <text class='search-title'>{{searchTitle}}</text>
   <text class='search-translate'>{{translateTitle}}</text>
   <view>
-    <view wx:for="{{list}}" class='movie-content'>
+    <view wx:for="{{list.result}}" class='movie-content'>
       <view class='per-paragraph'>
-        <view catchtap='chooseWay' class='img-container'>
-          <view class='info-view {{showStatus}}'>
-            <text>{{list.result[index].vEpisode}} {{list.result[index].sTime}}</text>
-            <text>{{list.result[index].vName}}</text>
+        <view catchtap='chooseWay' class='img-container' data-testId="{{index}}">
+          <view class='info-view {{showStatus}}'  wx:if='{{aniFlag[index]}}'>
+            <view>第{{list.result[index].vEpisode}}集 {{list.result[index].sTime}}</view>
+            
+            <view>{{vName}}</view>
           </view>
-          <image class='movie-img' src='{{list[index].image}}'></image>
-          <view class='handle-view {{showStatus}}'>
+          <image class='movie-img' src='http://47.101.58.51:8080/{{list.result[index].image}}'></image>
+          <view class='handle-view {{showStatus}}' wx:if='{{aniFlag[index]}}'>
             <text class='icon-image' catchtap='getPerImg' data-testId="{{list.result[index]}}"></text>
             <text class='icon-film' catchtap='getRealVideo' data-testId="{{list.result[index]}}"></text>
           </view>
         </view>
         <view class='text-view'>
-          <text class='movie-text'>{{list[index].sSubtitleZh}}</text>
-          <text class='movie-text'>{{list[index].sSubtitleEn}}</text>
+          <text class='movie-text'>{{list.result[index].sSubtitleZh}}</text>
+          <text class='movie-text'>{{list.result[index].sSubtitleEn}}</text>
           <button class='icon-microphone' bindtouchstart='startRecord' bindtouchend='endRecord' data-testId="{{list[index].sSubtitleEn}}">长按英文跟读评分</button>
         </view>
       </view>
     </view>
 
-    <!-- 每帧图片窗口 -->
-    <view class='per-image out-window' wx:if="{{getImg}}">
-      <text class='movie-name'></text>
-      <text class='close-window' catchtap='closeWindow'>X</text>
-      <view wx:for="{{list.result}}">
-        <image src='{{frontImg}}'></image>
-        <image src='list.result[index].image'></image>
-        <image src='{{behindImg}}'></image>
-        <text class='text-zh'>{{list.result[index].sSubtitleZh}}</text>
-        <text class='text-en'>{{list.result[index].sSubtitleEn}}</text>
+<!-- 页数选择 -->
+    <view class='page-choose'>
+      <button class='{{previousPageClass}}' bindtap='lastPage' wx:if='{{hasPreviousPage}}'>上一页</button>
+      <view wx:for="{{navigatepageNums}}">
+        <button class='page-text' bindtap='toPage' data-testId="{{item}}">{{item}}</button>
       </view>
+      <button class='{{nextPageClass}}' bindtap='nextPage' wx:if='{{hasNextPage}}'>下一页</button>
     </view>
+  <view class='window-container' wx:if="{{getImg||getVideo}}" catchtouchmove='true'>
+      <!-- 每帧图片窗口 -->
+      <view class='per-image out-window' wx:if="{{getImg}}">
+        <text class='movie-name'></text>
+        <text class='close-window' catchtap='closeWindow'>X</text>
+        <view wx:for="{{list.result}}">
+          <image src='http://47.101.58.51:8080/{{frontImg}}'></image>
+          <image src='http://47.101.58.51:8080/{{list.result[index].image}}'></image>
+          <image src='http://47.101.58.51:8080/{{behindImg}}'></image>
+          <text class='text-zh'>{{list.result[index].sSubtitleZh}}</text>
+          <text class='text-en'>{{list.result[index].sSubtitleEn}}</text>
+        </view>
+      </view>
 
-    <!-- 视频窗口 -->
-    <view class='per-video out-window' wx:if="{{getVideo}}">
-      <text class='movie-name'>{{vName}}</text>
-      <text class='close-window' catchtap='closeWindow'>X</text>
-      <video src='../../img/214.mp4'></video>
-    </view>
+      <!-- 视频窗口 -->
+      <view class='per-video out-window' wx:if="{{getVideo}}">
+        <text class='movie-name'>{{vName}}</text>
+        <text class='close-window' catchtap='closeWindow'>X</text>
+        <video src='../../img/214.mp4'></video>
+      </view>
+  </view>
 
-    <!-- 录音窗口 -->
-    <view class='recording out-window' wx:if="{{isRecord}}">
-      <text class='icon-microphone recording-icon'></text>
-      <text class='in-recording'>{{recordStatus}}</text>
-    </view>
+      <!-- 录音窗口 -->
+      <view class='recording out-window' wx:if="{{isRecord}}">
+        <text class='icon-microphone recording-icon'></text>
+        <text class='in-recording'>{{recordStatus}}</text>
+      </view>
 
-    <!-- 评分窗口 -->
-    <view class='grading out-window' wx:if="{{scoreShow}}">
-      <text>你的分数是{{score}}</text>
-      <text>{{scoreComment}}</text>
-      <text class='close-window' catchtap='closeWindow'></text>
-    </view>
-
+      <!-- 评分窗口 -->
+      <view class='grading out-window' wx:if="{{scoreShow}}">
+        <text>你的分数是{{score}}</text>
+        <text>{{scoreComment}}</text>
+        <text class='close-window' catchtap='closeWindow'></text>
+      </view>
   </view>
 
 

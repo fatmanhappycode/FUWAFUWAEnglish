@@ -10,7 +10,7 @@ Page({
     typeShow:false,
     languageShow:false,
     typeBtn:"影片类型",
-    languageBtn:"英语",
+    languageBtn:"中文",
     inputStatus:"input-down",
     searchWord:"",
     isSearch:false, // 是否已经按下搜索
@@ -19,16 +19,16 @@ Page({
     totalPage:1,
     hasPreviousPage:false,
     hasNextPage:false,
+    searchError:false,
     list:{"result":[
       {
-        vName: [''],
-        coverImage: [''],
+        
     }
     ]
     },
     previousPageClass:"page-btn",
     nextPageClass:"page-btn",
-    navigatepageNums:[1,2,3,4,5]
+    navigatepageNums:[]
   },
   //显示下拉
   showType:function(){
@@ -77,59 +77,41 @@ Page({
   //发起post请求
   requestByPost:function(page){
     var language;
-    if (this.data.languageBtn = '英语') {
+    if (this.data.languageBtn == '英语') {
       language = "En"
     } else {
       language = "Zh"
     }
     let that=this;
+    let data = `searchTitle=${this.data.searchWord}&pn=${this.data.page}&lang=${language}&videoType=${this.data.typeBtn == "影片类型" ? "" : this.data.typeBtn}`
+    console.log(data)
     wx.vrequest({
       url: 'http://47.101.58.51:8080/videos',
       method: 'POST',
       dataType: 'json',
-      data: 'searchTitle=你妈的&pn=1&lang=Zh&videoType=',
+      // data: 'searchTitle=' + that.data.searchWord + '&pn=' + that.data.page + '&lang=' + language + '&videoType=' + that.data.typeBtn == "影片类型" ? "" : that.data.typeBtn,
+      data:data,
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       success: function (res) {
         console.log(res)
-        res=res.data.extend.result
-        that.setData({
+        if(res.data.extend!=undefined){
+          res=res.data.extend.result;
+          that.setData({
             list:res.list,
-          navigatepageNums: res.navigatepageNums,
-          hasNextPage: res.hasNextPage,
-          hasPreviousPage: res.hasPreviousPage
+            navigatepageNums: res.navigatepageNums,
+            hasNextPage: res.hasNextPage,
+            hasPreviousPage: res.hasPreviousPage,
+            searchError: false
           })
+        }else{
+          that.setData({
+            searchError:true
+          })
+        }
       }
     });
-
-    // wx.request({
-    //   url: "http://47.101.58.51:8080/videos",
-    //   method: 'POST',
-    //   dataType: 'json',
-    //   data: {
-    //     searchTitle: this.data.searchWord,
-    //     pn: page,
-    //     lang: language,
-    //     videoType: this.data.typeBtn == "影片类型" ? "" : this.data.typeBtn
-    //   },
-    //   header: {
-    //     'Content-Type': 'application/x-www-form-urlencoded'
-    //   },
-    //   success: function (res) {
-    //     console.log(res);
-    //     res = res.extend.result
-    //     this.setData({
-    //       page: res.extend.result.pageNum,
-    //       totalPage: res.pages,
-    //       count: res.total,
-    //       previousPageClass: res.hasPreviousPage ? "page-btn" : "page-btn no-page",
-    //       nextPageClass: res.hasNextPage ? "page-btn" : "page-btn no-page",
-    //       navigatepageNums: res.navigatepageNums,
-    //       list: res.list
-    //     })
-    //   }
-    // })
   },
   //搜索电影
   searchMovie:function(){
@@ -140,10 +122,9 @@ Page({
       })
     }
     else{
-        //标记为当前是搜索状态
-        this.setData({
-          isSearch:true
-        })
+      this.setData({
+        isSearch: true
+      })
         //对搜索对应内容的请求
       this.requestByPost(this.data.page);
     }
@@ -179,13 +160,14 @@ Page({
   concreteContent: function (event) {
     var content = event.currentTarget.dataset.testid;
     var language;
-    if (this.data.languageBtn = '英语') {
+    if (this.data.languageBtn == '英语') {
       language = "En"
     } else {
       language = "Zh"
     }
+    let that=this
     wx.navigateTo({
-      url: '../content/content?searchTitle=' + this.data.searchWord + "&vName=" + this.data.content + "&lang=" + language,
+      url: '../content/content?searchTitle=' + that.data.searchWord + "&vName=" + content + "&lang=" + language,
     })
   },
   onLoad: function () {

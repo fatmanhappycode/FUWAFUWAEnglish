@@ -29,20 +29,25 @@
     <button class='search-btn' bindtap='searchMovie'>搜索</button>
   </view>
 
+  
+
 <!-- 搜索得到的电影列表 -->
   <view class='search-list'  wx:if="{{isSearch}}">
-    <view class='movie-list' wx:for="{{list.result}}">
+    <view class='no-search' wx:if='{{searchError}}'>
+      没有该搜索结果
+    </view>
+    <view class='movie-list' wx:for="{{list.result}}" wx:if='{{!searchError}}'>
      <view bindtap='concreteContent' data-testId="{{list.result[index].vName}}">
         <image src="http://47.101.58.51:8080/{{list.result[index].coverImage}}" class='movie-img'></image>
         <text class='movie-name'>{{list.result[index].vName}}</text>
       </view>
     </view>
     <view class='page-choose'>
-      <button class='{{previousPageClass}}' bindtap='lastPage'>上一页</button>
+      <button class='{{previousPageClass}}' bindtap='lastPage' wx:if='{{hasPreviousPage}}'>上一页</button>
       <view wx:for="{{navigatepageNums}}">
         <button class='page-text' bindtap='toPage' data-testId="{{item}}">{{item}}</button>
       </view>
-      <button class='{{nextPageClass}}' bindtap='nextPage'>下一页</button>
+      <button class='{{nextPageClass}}' bindtap='nextPage' wx:if='{{hasNextPage}}'>下一页</button>
     </view>
   </view>
 

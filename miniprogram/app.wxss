@@ -45,3 +45,24 @@
 .icon-microphone:before {
   content: "\f130";
 }
+
+.page-choose{
+  display: flex;
+  flex-direction: row;
+}
+
+.page-btn{
+  margin: 0rpx;
+  font-size: 30rpx;
+}
+
+.no-page{
+  color: rgb(102, 102, 102);
+}
+
+.page-text{
+  width:1.8rem;
+  text-align:center;
+  font-size:30rpx;
+  margin: 5rpx;
+}

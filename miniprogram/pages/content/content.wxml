@@ -51,7 +51,7 @@
       <view class='per-video out-window' wx:if="{{getVideo}}">
         <text class='movie-name'>{{vName}}</text>
         <text class='close-window' catchtap='closeWindow'>X</text>
-        <video src='../../img/214.mp4'></video>
+        <video src='http://47.101.58.51:8080/{{vUrl}}'></video>
       </view>
   </view>
 

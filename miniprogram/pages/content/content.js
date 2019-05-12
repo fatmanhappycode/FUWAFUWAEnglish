@@ -92,7 +92,7 @@ Page({
       success: function (res) {
         console.log(res);
         that.setData({
-          vUrl:res.extend.result
+          vUrl:res.data.extend.result
         })
       }
     });

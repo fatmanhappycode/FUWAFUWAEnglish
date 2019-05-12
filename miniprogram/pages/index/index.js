@@ -1,60 +1,193 @@
-//index.js
-//获取应用实例
-const app = getApp()
-let plugin = requirePlugin("myPlugin");
-let manager = plugin.getSoeRecorderManager({
-  secretId: 'AKIDhky3NZGAvsg0EJmxx1xmR2ticVQCAIhx',
-  secretKey: 'MfrwqZDi4K3d5VoBTgonfvEPWbO4RgIi'
-});
+//logs.js
+const util = require('../../utils/util.js')
 
 Page({
   data: {
-    motto: 'Hello World',
-    userInfo: {},
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    logs: [],
+    searchTip:'输入你想到的台词',
+    typeList:['无','剧情','爱情','动作','科幻','悬疑','惊悚'],
+    languageList:['英语','中文'],
+    typeShow:false,
+    languageShow:false,
+    typeBtn:"影片类型",
+    languageBtn:"英语",
+    inputStatus:"input-down",
+    searchWord:"",
+    isSearch:false, // 是否已经按下搜索
+    count:0,
+    page:1,
+    totalPage:1,
+    hasPreviousPage:false,
+    hasNextPage:false,
+    list:{"result":[
+      {
+        vName: [''],
+        coverImage: [''],
+    }
+    ]
+    },
+    previousPageClass:"page-btn",
+    nextPageClass:"page-btn",
+    navigatepageNums:[1,2,3,4,5]
   },
-  //事件处理函数
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
+  //显示下拉
+  showType:function(){
+    this.setData({
+      typeShow: true,
+      languageShow: false,
+      inputStatus: "input-down"
     })
   },
-  onLoad: function (options) {
-    console.log(options)
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
+  showLanguage:function(){
+    this.setData({
+      languageShow: true,
+      typeShow: false,
+      inputStatus: "input-down"
+    })
+  },
+  //隐藏下拉
+  hideList:function(){
+    this.setData({
+      typeShow:false,
+      languageShow: false,
+      inputStatus: "input-up"
+    })
+  },
+  //改变按钮名称
+  typeChange: function (event) {
+    var content = event.currentTarget.dataset.testid;
+    this.setData({
+      typeBtn: content,
+      typeShow: false
+    })
+  },
+  languageChange:function(event){
+    var content = event.currentTarget.dataset.testid;
+    this.setData({
+      languageBtn: content,
+      languageShow: false
+    })
+  },
+  //监听输入内容
+  inputStr:function(e){
+    this.setData({
+      searchWord:e.detail.value
+    })
+  },
+  //发起post请求
+  requestByPost:function(page){
+    var language;
+    if (this.data.languageBtn = '英语') {
+      language = "En"
     } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
+      language = "Zh"
+    }
+    let that=this;
+    wx.vrequest({
+      url: 'http://47.101.58.51:8080/videos',
+      method: 'POST',
+      dataType: 'json',
+      data: 'searchTitle=你妈的&pn=1&lang=Zh&videoType=',
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      success: function (res) {
+        console.log(res)
+        res=res.data.extend.result
+        that.setData({
+            list:res.list,
+          navigatepageNums: res.navigatepageNums,
+          hasNextPage: res.hasNextPage,
+          hasPreviousPage: res.hasPreviousPage
           })
-        }
+      }
+    });
+
+    // wx.request({
+    //   url: "http://47.101.58.51:8080/videos",
+    //   method: 'POST',
+    //   dataType: 'json',
+    //   data: {
+    //     searchTitle: this.data.searchWord,
+    //     pn: page,
+    //     lang: language,
+    //     videoType: this.data.typeBtn == "影片类型" ? "" : this.data.typeBtn
+    //   },
+    //   header: {
+    //     'Content-Type': 'application/x-www-form-urlencoded'
+    //   },
+    //   success: function (res) {
+    //     console.log(res);
+    //     res = res.extend.result
+    //     this.setData({
+    //       page: res.extend.result.pageNum,
+    //       totalPage: res.pages,
+    //       count: res.total,
+    //       previousPageClass: res.hasPreviousPage ? "page-btn" : "page-btn no-page",
+    //       nextPageClass: res.hasNextPage ? "page-btn" : "page-btn no-page",
+    //       navigatepageNums: res.navigatepageNums,
+    //       list: res.list
+    //     })
+    //   }
+    // })
+  },
+  //搜索电影
+  searchMovie:function(){
+    //判断是否为空
+    if(this.data.searchWord===""){
+      this.setData({
+        searchTip:'搜索内容不饿能为空'
       })
     }
+    else{
+        //标记为当前是搜索状态
+        this.setData({
+          isSearch:true
+        })
+        //对搜索对应内容的请求
+      this.requestByPost(this.data.page);
+    }
   },
-  getUserInfo: function(e) {
-    console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
+  //上一页
+  lastPage:function(){
+    var language;
+    if (this.data.languageBtn = '英语') {
+      language = "En"
+    } else {
+      language = "Zh"
+    }
+    //对搜索对应内容的请求
+    this.requestByPost(this.data.page-1);
+  },
+  //下一页
+  nextPage:function(){
+    var language;
+    if (this.data.languageBtn = '英语') {
+      language = "En"
+    } else {
+      language = "Zh"
+    }
+    //对搜索对应内容的请求
+    this.requestByPost(this.data.page+1);
+  },
+  //跳转到某一页
+  toPage:function(event){
+    var item = event.currentTarget.dataset.testid;
+    this.requestByPost(item);
+  },
+  //点击电影查看具体内容
+  concreteContent: function (event) {
+    var content = event.currentTarget.dataset.testid;
+    var language;
+    if (this.data.languageBtn = '英语') {
+      language = "En"
+    } else {
+      language = "Zh"
+    }
+    wx.navigateTo({
+      url: '../content/content?searchTitle=' + this.data.searchWord + "&vName=" + this.data.content + "&lang=" + language,
     })
+  },
+  onLoad: function () {
   }
 })

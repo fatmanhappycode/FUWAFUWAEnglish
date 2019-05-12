@@ -1,13 +1,49 @@
-<!--index.wxml-->
-<view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
+<!--logs.wxml-->
+<view class="container" bindtap="hideList">
+  <text class='top-title'>SubtitleSearch</text>
+
+  <view class='choose-view'>
+
+    <view class="click-list">
+      <button class='type-choose' catchtap="showType">{{typeBtn}}</button>
+      <view class="show-list">
+        <view  wx:if="{{typeShow}}" wx:for="{{typeList}}">
+          <text class='list-content' catchtap="typeChange" data-testId="{{item}}">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="click-list">
+      <button class='type-choose' catchtap="showLanguage">{{languageBtn}}</button>
+      <view class="show-list">
+        <view  wx:if="{{languageShow}}" wx:for="{{languageList}}">
+          <text class='list-content' catchtap="languageChange" data-testId="{{item}}">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+</view>
+
+  <view class='search-view {{inputStatus}}'>
+    <input  placeholder='{{searchTip}}' class='input' bindinput='inputStr'></input>
+    <button class='search-btn' bindtap='searchMovie'>搜索</button>
   </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+
+<!-- 搜索得到的电影列表 -->
+  <view class='search-list'  wx:if="{{isSearch}}">
+    <view class='movie-list' wx:for="{{list.result}}">
+     <view bindtap='concreteContent' data-testId="{{list.result[index].vName}}">
+        <image src="http://47.101.58.51:8080/{{list.result[index].coverImage}}" class='movie-img'></image>
+        <text class='movie-name'>{{list.result[index].vName}}</text>
+      </view>
+    </view>
+    <view class='page-choose'>
+      <button class='{{previousPageClass}}' bindtap='lastPage'>上一页</button>
+      <view wx:for="{{navigatepageNums}}">
+        <button class='page-text' bindtap='toPage' data-testId="{{item}}">{{item}}</button>
+      </view>
+      <button class='{{nextPageClass}}' bindtap='nextPage'>下一页</button>
+    </view>
   </view>
+
 </view>

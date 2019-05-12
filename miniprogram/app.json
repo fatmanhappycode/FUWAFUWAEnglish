@@ -1,8 +1,7 @@
 {
   "pages": [
-    "pages/content/content",
-    "pages/logs/logs",
-    "pages/index/index"
+    "pages/index/index",
+    "pages/content/content"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -10,11 +9,5 @@
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle": "black"
   },
-  "sitemapLocation": "sitemap.json",
-  "plugins": {
-    "myPlugin": {
-      "version": "1.1.1",
-      "provider": "wxe5a00a1780c8eb95"
-    }
-  }
+  "sitemapLocation": "sitemap.json"
 }

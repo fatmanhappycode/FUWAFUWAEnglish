@@ -7,13 +7,13 @@
       <view class='per-paragraph'>
         <view catchtap='chooseWay' class='img-container'>
           <view class='info-view {{showStatus}}'>
-            <text>{{list.result[index].sTime}}</text>
+            <text>{{list.result[index].vEpisode}} {{list.result[index].sTime}}</text>
             <text>{{list.result[index].vName}}</text>
           </view>
           <image class='movie-img' src='{{list[index].image}}'></image>
           <view class='handle-view {{showStatus}}'>
-            <text class='icon-image' catchtap='getPerImg'></text>
-            <text class='icon-film' catchtap='getRealVideo' data-testId="{{list[index]}}"></text>
+            <text class='icon-image' catchtap='getPerImg' data-testId="{{list.result[index]}}"></text>
+            <text class='icon-film' catchtap='getRealVideo' data-testId="{{list.result[index]}}"></text>
           </view>
         </view>
         <view class='text-view'>
@@ -29,7 +29,9 @@
       <text class='movie-name'></text>
       <text class='close-window' catchtap='closeWindow'>X</text>
       <view wx:for="{{list.result}}">
+        <image src='{{frontImg}}'></image>
         <image src='list.result[index].image'></image>
+        <image src='{{behindImg}}'></image>
         <text class='text-zh'>{{list.result[index].sSubtitleZh}}</text>
         <text class='text-en'>{{list.result[index].sSubtitleEn}}</text>
       </view>

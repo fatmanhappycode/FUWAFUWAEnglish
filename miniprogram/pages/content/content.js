@@ -14,7 +14,8 @@ Page({
       sSubtitleZh:'这里',
       sSubtitleEn:'here',
       vName:"",
-      sTime:""
+      sTime:"", // 播放时间点
+      vEpisode:"" // 播放集数
     }],
     showStatus:"",
     showWay:"showChoose",
@@ -26,7 +27,9 @@ Page({
     scoreComment:"", // 对分数进行评价
     score:0,
     recordStatus: "正在录音", // 录音状态
-    recodePath: "" // 录音存放路径
+    recodePath: "", // 录音存放路径
+    frontImg:"", // 三帧图片的第一张
+    behindImg: "" // 三帧图片的最后一张
   },
   //点击跳出图片和视频图标提供选择
   chooseWay:function(){
@@ -42,8 +45,18 @@ Page({
   },
   //让每帧图片窗口跳出
   getPerImg:function(){
+    var list = event.currentTarget.dataset.testid;
+    let img=list.image;
+    let imgArr=img.split('/');
+    let num=imgArr[imgArr.length-1].split('.');
+    imgArr[imgArr.length-1]=(parseInt(num[0])-1)+'.'+num[1]
+    let fImg=imgArr.join('/');
+    imgArr[imgArr.length - 1] = (parseInt(num[0]) + 1) + '.' + num[1]
+    let bImg = imgArr.join('/');
     this.setData({
-      getImg:true
+      getImg: true,
+      frontImg:fImg,
+      behindImg:bImg
     })
   }, 
   //让视频窗口跳出
@@ -54,6 +67,8 @@ Page({
     })
     wx.request({
       url: '',
+      method:'post',
+      dataType:'json',
       data:{
         vName:list.vName,
         time:list.sTime
@@ -154,12 +169,41 @@ Page({
       scoreComment:commend
     })
   },
+  // 单词请求音标
+  wordsRequest: function (word){
+    wx.request({
+      url: 'http://dict-co.iciba.com/api/dictionary.php?w='+word+'&type=json&key=32B25A29CBE2D70D4E1DA12036763605',
+      data: '',
+      method: 'POST',
+      dataType: 'json',
+      success: function(res) {
+        this.setData({
+          translateTitle:res.ph_en
+        })
+      }
+    })
+  },
+  //句子请求翻译
+  sentenceRequest: function (str){
+    wx.request({
+      url: 'url:http://fanyi.baidu.com/transapi?from=auto&to=cht&query='+str,
+      data: '',
+      method: 'POST',
+      dataType: 'json',
+      success: function (res) {
+        this.setData({
+          translateTitle: res.data.dst
+        })
+       }
+    })
+  },
   onLoad:function(options){
     this.setData({
       vName:options.vName,
       lang:options.lang,
       searchTitle:options.searchTitle
     })
+    //使用上个页面传过来的搜索字符串进行请求
     wx.request({
       url: "",
       data: {
@@ -174,5 +218,11 @@ Page({
         })
       }
     })
+    //判断为单词还是句子
+    let str = options.searchTitle.trim();
+    if (str.replace(/^[A-Za-z]+$/, "")=="")// 为单词
+      this.wordsRequest(str);
+    else
+      this.sentenceRequest(str);
   }
 })

@@ -1,8 +1,8 @@
-// let plugin = requirePlugin("myPlugin");
-// let manager = plugin.getSoeRecorderManager({
-//   secretId: 'AKIDhky3NZGAvsg0EJmxx1xmR2ticVQCAIhx',
-//   secretKey: 'MfrwqZDi4K3d5VoBTgonfvEPWbO4RgIi'
-// });
+let plugin = requirePlugin("myPlugin");
+let manager = plugin.getSoeRecorderManager({
+  secretId: 'AKIDhky3NZGAvsg0EJmxx1xmR2ticVQCAIhx',
+  secretKey: 'MfrwqZDi4K3d5VoBTgonfvEPWbO4RgIi'
+});
 Page({
   data:{
     searchTitle:"",
@@ -90,64 +90,23 @@ Page({
   },
   //开始录音
   startRecord: function () {
-    var that = this; // 存储this
     this.setData({
       isRecord: true,
       recordStatus: "正在录音"
     })
-    wx.startRecord({
-      success: function (res) {
-        res = res.extend.result
-        var tempFilePath = res.tempFilePath
-        that.setData({
-          recodePath: tempFilePath
-        })
-      },
-      fail: function (res) {
-        console.log('fail')
-        console.log(res)
-      }
-    })
-  },
-  // 上传录音
-  uploadRecord: function (event) {
-    var sentence = event.currentTarget.dataset.testid // 要测试的英文句子
-    this.setData({
-      recordStatus:"录音上传中"
-    })
-    var that=this;
-
-    wx.uploadFile({
-      url: '',
-      filePath: 'that.data.recodePath',
-      name: 'file',
-      data:{
-        message: sentence
-      },
-      success: function (res) {
-        res = res.extend.result
-
-        that.endRecord()
-      },
-      fail:function(){
-        console.log('fail')
-        that.setData({
-          recordStatus: "录音上传失败"
-        })
-        that.endRecord()
-      }
-    })
+    manager.start({
+      content: 'you jump, i jump',
+      evalMode: 1
+    });
   },
   // 结束录音
   endRecord: function () {
-    setTimeout(()=>{
-      this.setData({
-        isRecord: false,
-        scoreShow:true
-      })
-      this.commentScore()
-    },500)
-    wx.stopRecord()
+    manager.stop();
+    this.setData({
+      isRecord: false,
+      scoreShow: true
+    })
+    this.commentScore()
   },
   // 评价分数
   commentScore:function(){
@@ -197,7 +156,16 @@ Page({
        }
     })
   },
-  onLoad:function(options){
+  onLoad: function (options) {
+    let that=this;
+    manager.onSuccess((res) => {
+      //打印识别结果
+      console.log(res);
+      this.setData({
+        score: res.SuggestedScore
+      })
+    });
+
     this.setData({
       vName:options.vName,
       lang:options.lang,

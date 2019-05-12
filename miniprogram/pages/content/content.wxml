@@ -19,7 +19,7 @@
         <view class='text-view'>
           <text class='movie-text'>{{list[index].sSubtitleZh}}</text>
           <text class='movie-text'>{{list[index].sSubtitleEn}}</text>
-          <button class='icon-microphone' bindtouchstart='startRecord' bindtouchend='uploadRecord' data-testId="{{list[index].sSubtitleEn}}">长按英文跟读评分</button>
+          <button class='icon-microphone' bindtouchstart='startRecord' bindtouchend='endRecord' data-testId="{{list[index].sSubtitleEn}}">长按英文跟读评分</button>
         </view>
       </view>
     </view>

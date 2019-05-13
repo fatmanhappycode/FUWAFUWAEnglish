@@ -34,7 +34,7 @@
 <!-- 搜索得到的电影列表 -->
   <view class='search-list'  wx:if="{{isSearch}}">
     <view class='no-search' wx:if='{{searchError}}'>
-      没有该搜索结果
+      {{searchInfo}}
     </view>
     <view class='movie-list' wx:for="{{list.result}}" wx:if='{{!searchError}}'>
      <view bindtap='concreteContent' data-testId="{{list.result[index].vName}}">
@@ -42,7 +42,7 @@
         <text class='movie-name'>{{list.result[index].vName}}</text>
       </view>
     </view>
-    <view class='page-choose'>
+    <view class='page-choose' wx:if='{{!searchError}}'>
       <button class='{{previousPageClass}}' bindtap='lastPage' wx:if='{{hasPreviousPage}}'>上一页</button>
       <view wx:for="{{navigatepageNums}}">
         <button class='page-text' bindtap='toPage' data-testId="{{item}}">{{item}}</button>

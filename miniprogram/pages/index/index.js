@@ -5,6 +5,7 @@ Page({
   data: {
     logs: [],
     searchTip:'输入你想到的台词',
+    searchInfo:'正在搜索中',
     typeList:['无','剧情','爱情','动作','科幻','悬疑','惊悚'],
     languageList:['英语','中文'],
     typeShow:false,
@@ -76,6 +77,12 @@ Page({
   },
   //发起post请求
   requestByPost:function(page){
+    // 重置内容
+    this.setData({
+      hasPreviousPage: false,
+      hasNextPage: false,
+      list:""
+    })
     var language;
     if (this.data.languageBtn == '英语') {
       language = "En"
@@ -94,22 +101,29 @@ Page({
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      success: function (res) {
-        console.log(res)
-        if(res.data.extend!=undefined){
-          res=res.data.extend.result;
-          that.setData({
-            list:res.list,
-            navigatepageNums: res.navigatepageNums,
-            hasNextPage: res.hasNextPage,
-            hasPreviousPage: res.hasPreviousPage,
-            searchError: false
-          })
-        }else{
-          that.setData({
-            searchError:true
-          })
-        }
+      success: function (response) {
+        console.log(response)
+        let res = response.data.extend.result;
+        that.setData({
+          searchError: true,
+          searchInfo: '正在搜索中...',
+          list: res.list,
+          navigatepageNums: res.navigatepageNums,
+          hasNextPage: res.hasNextPage,
+          hasPreviousPage: res.hasPreviousPage,
+        })
+        setTimeout(function () {
+          console.log(res.total)
+          if(res.total>0){
+              that.setData({
+                searchError: false
+              })
+          }else{
+            that.setData({
+              searchInfo: '没有搜索结果'
+            })
+            }
+        }, 1000)
       }
     });
   },
@@ -118,14 +132,14 @@ Page({
     //判断是否为空
     if(this.data.searchWord===""){
       this.setData({
-        searchTip:'搜索内容不饿能为空'
+        searchTip:'搜索内容不能为空'
       })
     }
     else{
       this.setData({
         isSearch: true
       })
-        //对搜索对应内容的请求
+      //对搜索对应内容的请求
       this.requestByPost(this.data.page);
     }
   },

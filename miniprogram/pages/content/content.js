@@ -171,16 +171,19 @@ Page({
   sentenceRequest: function (str){
     let that=this;
     wx.vrequest({
-      url: 'http://fanyi.baidu.com/transapi',
-      data: 'from=auto&to=cht&query=' + str,
+      url: 'http://fanyi.youdao.com/translate',
       method: 'POST',
       dataType: 'json',
+      data: 'doctype=json&type=AUTO&i=' + str,
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       success: function (res) {
         console.log(res)
         that.setData({
           translateTitle: res.data.dst
         })
-       }
+      }
     })
   },
   onLoad: function (options) {

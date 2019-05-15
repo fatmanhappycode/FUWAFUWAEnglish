@@ -106,6 +106,44 @@ Page({
       scoreShow:false
     })
   },
+  //上一页
+  lastPage: function () {
+    var language;
+    if (this.data.languageBtn = '英语') {
+      language = "En"
+    } else {
+      language = "Zh"
+    }
+    //对搜索对应内容的请求
+    this.requestByPost(this.data.pageNum - 1);
+    this.goScrolltop();
+  },
+  //下一页
+  nextPage: function () {
+    var language;
+    if (this.data.languageBtn = '英语') {
+      language = "En"
+    } else {
+      language = "Zh"
+    }
+    //对搜索对应内容的请求
+    this.requestByPost(this.data.pageNum + 1);
+    this.goScrolltop();
+  },
+  //跳转到某一页
+  toPage: function (event) {
+    var item = event.currentTarget.dataset.testid;
+    this.requestByPost(item);
+    this.goScrolltop();
+  },
+  //回到顶部
+  goScrolltop: function (e) {
+    if (wx.pageScrollTo) {
+      wx.pageScrollTo({
+        scrollTop: 0
+      })
+    }
+    },
   //开始录音
   startRecord: function (event) {
     this.setData({
@@ -150,7 +188,8 @@ Page({
   },
   // 单词请求音标
   wordsRequest: function (word){
-    let that=this;
+    let that = this;
+    console.log('danci');
     wx.vrequest({
       url: 'http://dict-co.iciba.com/api/dictionary.php?key=32B25A29CBE2D70D4E1DA12036763605',
       method: 'POST',
@@ -170,6 +209,7 @@ Page({
   //句子请求翻译
   sentenceRequest: function (str){
     let that=this;
+    console.log('juzi');
     wx.vrequest({
       url: 'http://fanyi.youdao.com/translate',
       method: 'POST',
@@ -181,34 +221,24 @@ Page({
       success: function (res) {
         console.log(res)
         that.setData({
-          translateTitle: res.data.dst
+          translateTitle: res.data.translateResult[0][0].tgt
         })
       }
     })
   },
-  onLoad: function (options) {
-    let that=this;
-    manager.onSuccess((res) => {
-      //打印识别结果
-      console.log(res);
-      this.setData({
-        score: res.SuggestedScore
-      })
-    });
-
+  //请求页面数据
+  requestByPost: function (pn) {
+    let that = this;
+    let data = `searchTitle=${this.data.searchTitle}&pn=${pn}&vName=${this.data.vName}&lang=${this.data.lang}`;
     this.setData({
-      vName:options.vName,
-      lang:options.lang,
-      searchTitle:options.searchTitle,
-    })
-    let data = `searchTitle=${this.data.searchTitle}&pn=1&vName=${this.data.vName}&lang=${this.data.lang}`
-    console.log(data);
+      pageNum:pn
+    });
     //使用上个页面传过来的搜索字符串进行请求
     wx.vrequest({
       url: 'http://47.101.58.51:8080/subtitles',
       method: 'POST',
       dataType: 'json',
-      data:data,
+      data: data,
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
@@ -218,13 +248,31 @@ Page({
         that.setData({
           list: res.list,
           hasNextPage: res.hasNextPage,
-          hasPreviousPage:res.hasPreviousPage,
-          pageNum:res.pageNum,
+          hasPreviousPage: res.hasPreviousPage,
+          pageNum: res.pageNum,
           navigatepageNums: res.navigatepageNums
         })
 
       }
     });
+  },
+  onLoad: function (options) {
+    let that=this;
+    manager.onSuccess((res) => {
+      //打印识别结果
+      console.log(res);
+      that.setData({
+        score: res.SuggestedScore
+      })
+    });
+
+    this.setData({
+      vName:options.vName,
+      lang:options.lang,
+      searchTitle:options.searchTitle,
+    })
+    //请求数据
+    this.requestByPost(1);
     if(options.lang=='En'){
       //判断为单词还是句子
       let str = options.searchTitle.trim();

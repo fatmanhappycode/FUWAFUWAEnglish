@@ -151,8 +151,12 @@ Page({
     } else {
       language = "Zh"
     }
+    this.setData({
+      page:this.data.page-1
+    })
     //对搜索对应内容的请求
-    this.requestByPost(this.data.page-1);
+    this.requestByPost(this.data.page);
+    this.goScrolltop();
   },
   //下一页
   nextPage:function(){
@@ -162,13 +166,21 @@ Page({
     } else {
       language = "Zh"
     }
+    this.setData({
+      page: this.data.page + 1
+    })
     //对搜索对应内容的请求
-    this.requestByPost(this.data.page+1);
+    this.requestByPost(this.data.page + 1);
+    this.goScrolltop();
   },
   //跳转到某一页
   toPage:function(event){
     var item = event.currentTarget.dataset.testid;
+    this.setData({
+      page: item
+    })
     this.requestByPost(item);
+    this.goScrolltop();
   },
   //点击电影查看具体内容
   concreteContent: function (event) {

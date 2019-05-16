@@ -27,6 +27,9 @@
   <view class='search-view {{inputStatus}}'>
     <input  placeholder='{{searchTip}}' class='input' bindinput='inputStr'></input>
     <button class='search-btn' bindtap='searchMovie'>搜索</button>
+    <view class='search-tip' wx:if='{{searching}}' >
+      <text wx:for="{{searchChoose}}" bindtap='searchByTip' data-testId="{{searchChoose[index]}}">{{searchChoose[index]}}</text>
+    </view>
   </view>
 
   

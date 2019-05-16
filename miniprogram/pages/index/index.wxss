@@ -36,7 +36,24 @@
 
 .search-view{
   display: flex;
+  position: relative;
   flex-direction:row;
+}
+
+.search-tip{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 100%;
+}
+
+.search-tip text{
+  display: inline-block;
+  border: 1px solid #000;
+  width: 225px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .no-search{

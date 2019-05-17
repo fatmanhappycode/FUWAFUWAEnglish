@@ -23,14 +23,14 @@
           </view>
           <image class='movie-img' src='http://47.101.58.51:8080/{{list.result[index].image}}'></image>
           <view class='handle-view {{showStatus}}' wx:if='{{aniFlag[index]}}'>
-            <text class='icon-image' catchtap='getPerImg' data-testId="{{index}}"></text>
-            <text class='icon-film' catchtap='getRealVideo' data-testId="{{list.result[index]}}"></text>
+            <image src='../../img/img.png' class='chooseWayImg' catchtap='getPerImg' data-testId="{{index}}"></image>
+            <image src='../../img/video.png' class='chooseWayImg'  catchtap='getRealVideo' data-testId="{{list.result[index]}}"></image>
           </view>
         </view>
         <view class='text-view'>
           <text class='movie-text'>{{list.result[index].sSubtitleZh}}</text>
           <text class='movie-text'>{{list.result[index].sSubtitleEn}}</text>
-          <button class='icon-microphone' bindtouchstart='startRecord' bindtouchend='endRecord' data-testId="{{list[index].sSubtitleEn}}">长按英文跟读评分</button>
+          <button class='microphone' bindtouchstart='startRecord' bindtouchend='endRecord' data-testId="{{list.result[index].sSubtitleEn}}">长按英文跟读评分</button>
         </view>
       </view>
     </view>
@@ -61,7 +61,7 @@
 
       <!-- 录音窗口 -->
       <view class='recording out-window' wx:if="{{isRecord}}">
-        <text class='icon-microphone recording-icon'></text>
+        <image src='../../img/sound.png' ></image>
         <text class='in-recording'>{{recordStatus}}</text>
       </view>
 

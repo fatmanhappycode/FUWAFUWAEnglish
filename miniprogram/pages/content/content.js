@@ -193,11 +193,14 @@ Page({
   // 结束录音
   endRecord: function () {
     manager.stop();
-    this.setData({
-      isRecord: false,
-      scoreShow: true
-    })
-    this.commentScore()
+    let that=this;
+    setTimeout(function () {
+      that.setData({
+        isRecord: false,
+        scoreShow: true
+      })
+      this.commentScore()
+    },700)
   },
   // 评价分数
   commentScore:function(){

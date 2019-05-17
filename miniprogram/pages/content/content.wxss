@@ -98,7 +98,7 @@
   background-color: rgba(204,204,204,0.5);
 }
 
-.icon-microphone{
+.microphone{
   font-size:1rem;
   padding:18rpx;
   width:72%;
@@ -139,6 +139,18 @@
 .close-window{
   color: rgb(255,255,255);
 }
+
+/* 小图标 */
+
+.chooseWayImg{
+width:60rpx;
+height:60rpx;
+padding:20rpx;
+margin: 10rpx;
+border:2rpx solid white;
+border-radius:50%;
+}
+
 /* 视频窗口 */
 .per-video{
 
@@ -150,10 +162,9 @@
   padding: 36px;
 }
 
-.recording-icon{
-  font-size: 3rem;
-  text-align: center;
-  color: rgb(0,192,0)
+.recording img{
+  width: 200rpx;
+  height: 200rpx;
 }
 
 

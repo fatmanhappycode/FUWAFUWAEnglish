@@ -22,6 +22,7 @@ Page({
     hideWay:"hideChoose",
     getImg:false,
     getVideo:false,
+    imgIndex:0,
     isRecord:false,
     scoreShow:false,
     scoreComment:"", // 对分数进行评价
@@ -33,6 +34,7 @@ Page({
     hasNextPage: false,
     hasPreviousPage: false,
     pageNum: 1,
+    getTop:'',
     navigatepageNums: [],
     aniFlag:[false,false,false,false,false,false,false,false,false]
   },
@@ -59,8 +61,26 @@ Page({
     },500)
   },
   //让每帧图片窗口跳出
-  getPerImg:function(event){
-    var list = event.currentTarget.dataset.testid;
+  getPerImg: function (event) {
+    let index = event.currentTarget.dataset.testid
+    // let query=wx.createSelectorQuery();
+    // let that=this;
+    // query.select('#query'+index).boundingClientRect();
+    // query.selectViewport().scrollOffset()
+    // query.exec(function (res) {
+    //   console.log(res);
+    //   that.setData({
+    //     getTop: res[0].top+res[0].height  // 记下距离顶部的距离
+    //   })
+    // })
+
+    let top=200+260*parseInt(index+1);
+    this.setData({
+      getTop:top,
+      aniFlag: [false, false, false, false, false, false, false, false, false]
+    })
+    
+    let list =this.data.list.result[index];
     let img=list.image;
     let imgArr=img.split('/');
     let num=imgArr[imgArr.length-1].split('.');
@@ -71,8 +91,10 @@ Page({
     this.setData({
       getImg: true,
       frontImg:fImg,
-      behindImg:bImg
-    })
+      behindImg:bImg,
+      imgIndex: index
+    });
+    this.goScrolltop();
   }, 
   //让视频窗口跳出
   getRealVideo: function (event) {
@@ -100,11 +122,22 @@ Page({
   },
   //关闭跳出来的窗口
   closeWindow:function(){
+    let flag=false;
+    if(this.data.getImg){
+      flag=true;
+    }
     this.setData({
       getImg:false,
       getVideo: false,
       scoreShow:false
     })
+    if(flag){
+      console.log(this.data.getTop); 
+      wx.pageScrollTo({
+        scrollTop: this.data.getTop,
+        duration: 0
+      })
+    }
   },
   //上一页
   lastPage: function () {

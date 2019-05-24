@@ -104,7 +104,7 @@ Page({
     })
     let that=this;
     wx.vrequest({
-      url: 'http://47.101.58.51:8080/getVideo',
+      url: 'http://localhost:8090/getVideo',
       method: 'POST',
       dataType: 'json',
       data: `vName=${list.vName}&time=${list.sTime}`,
@@ -271,7 +271,7 @@ Page({
     });
     //使用上个页面传过来的搜索字符串进行请求
     wx.vrequest({
-      url: 'http://47.101.58.51:8080/subtitles',
+      url: 'http://localhost:8090/subtitles',
       method: 'POST',
       dataType: 'json',
       data: data,

@@ -40,9 +40,16 @@
       {{searchInfo}}
     </view>
     <view class='movie-list' wx:for="{{list.result}}" wx:if='{{!searchError}}'>
-     <view bindtap='concreteContent' data-testId="{{list.result[index].vName}}">
+     <view class='movie-container'>
         <image src="http://47.101.58.51:8080/{{list.result[index].coverImage}}" class='movie-img'></image>
-        <text class='movie-name'>{{list.result[index].vName}}</text>
+        <view>
+          <text class='movie-name'>{{list.result[index].vName}}</text>
+          <!-- <text class='movie-type' wx:for="{{list.result[index].vType}}" wx:key="i">{{list.result[index].vType[i]}}</text> -->
+          <view>
+            <text class='movie-type' wx:for="{{testType}}" wx:key="i">恐慌</text>
+          </view>
+        </view>
+        <button class='enter-detailed' bindtap='concreteContent' data-testId="{{list.result[index].vName}}">详细信息</button>
       </view>
     </view>
     <view class='page-choose' wx:if='{{!searchError}}'>

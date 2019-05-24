@@ -3,6 +3,7 @@ const util = require('../../utils/util.js')
 
 Page({
   data: {
+    testType:['恐怖', '搞笑', '科幻'],
     logs: [],
     searchTip:'输入你想到的台词',
     searchInfo:'正在搜索中',
@@ -21,12 +22,7 @@ Page({
     hasPreviousPage:false,
     hasNextPage:false,
     searchError:false,
-    list:{"result":[
-      {
-        
-    }
-    ]
-    },
+    list:{},
     previousPageClass:"page-btn",
     nextPageClass:"page-btn",
     navigatepageNums:[],

@@ -1,4 +1,8 @@
 /**app.wxss**/
+button{
+  border:1px solid rgba(204,204,204,.5)
+}
+
 .container {
   height: 100%;
   display: flex;

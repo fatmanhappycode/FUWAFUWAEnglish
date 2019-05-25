@@ -63,17 +63,6 @@ Page({
   //让每帧图片窗口跳出
   getPerImg: function (event) {
     let index = event.currentTarget.dataset.testid
-    // let query=wx.createSelectorQuery();
-    // let that=this;
-    // query.select('#query'+index).boundingClientRect();
-    // query.selectViewport().scrollOffset()
-    // query.exec(function (res) {
-    //   console.log(res);
-    //   that.setData({
-    //     getTop: res[0].top+res[0].height  // 记下距离顶部的距离
-    //   })
-    // })
-
     let top=200+260*parseInt(index+1);
     this.setData({
       getTop:top,

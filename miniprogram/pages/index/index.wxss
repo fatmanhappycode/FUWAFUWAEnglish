@@ -114,6 +114,7 @@
 
 .movie-type{
   margin-left: 10rpx;
+  color:#666;
 }
 
 .enter-detailed{

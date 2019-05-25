@@ -13,7 +13,7 @@
         <text class='close-window' catchtap='closeWindow'>X</text>
       </view>
   <view  wx:if="{{!getImg}}">
-    <view wx:for="{{list.result}}" class='movie-content'>
+    <view wx:for="{{list.result}}" wx:key="index" class='movie-content'>
       <view class='per-paragraph' id='query{{index}}'>
         <view catchtap='chooseWay' class='img-container' data-testId="{{index}}">
           <view class='info-view {{showStatus}}'  wx:if='{{aniFlag[index]}}'>
@@ -38,7 +38,7 @@
 <!-- 页数选择 -->
     <view class='page-choose'  wx:if="{{!getImg}}">
       <button class='{{previousPageClass}}' bindtap='lastPage' wx:if='{{hasPreviousPage}}'>上一页</button>
-      <view wx:for="{{navigatepageNums}}">
+      <view wx:for="{{navigatepageNums}}" wx:key="index">
         <button class='page-text' bindtap='toPage' data-testId="{{item}}">{{item}}</button>
       </view>
       <button class='{{nextPageClass}}' bindtap='nextPage' wx:if='{{hasNextPage}}'>下一页</button>

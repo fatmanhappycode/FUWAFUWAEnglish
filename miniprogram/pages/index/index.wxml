@@ -7,7 +7,7 @@
     <view class="click-list">
       <button class='type-choose' catchtap="showType">{{typeBtn}}</button>
       <view class="show-list">
-        <view  wx:if="{{typeShow}}" wx:for="{{typeList}}">
+        <view  wx:if="{{typeShow}}" wx:for="{{typeList}}" wx:key="index">
           <text class='list-content' catchtap="typeChange" data-testId="{{item}}">{{item}}</text>
         </view>
       </view>
@@ -16,7 +16,7 @@
     <view class="click-list">
       <button class='type-choose' catchtap="showLanguage">{{languageBtn}}</button>
       <view class="show-list">
-        <view  wx:if="{{languageShow}}" wx:for="{{languageList}}">
+        <view  wx:if="{{languageShow}}" wx:for="{{languageList}}"  wx:key="index">
           <text class='list-content' catchtap="languageChange" data-testId="{{item}}">{{item}}</text>
         </view>
       </view>
@@ -27,6 +27,9 @@
   <view class='search-view {{inputStatus}}'>
     <input  placeholder='{{searchTip}}' class='input' bindinput='inputStr'></input>
     <button class='search-btn' bindtap='searchMovie'>搜索</button>
+    <view class='search-tip' wx:if='{{searching}}' >
+      <text wx:for="{{searchChoose}}" wx:key="index" bindtap='searchByTip' data-testId="{{searchChoose[index]}}">{{searchChoose[index]}}</text>
+    </view>
   </view>
 
   
@@ -36,15 +39,22 @@
     <view class='no-search' wx:if='{{searchError}}'>
       {{searchInfo}}
     </view>
-    <view class='movie-list' wx:for="{{list.result}}" wx:if='{{!searchError}}'>
-     <view bindtap='concreteContent' data-testId="{{list.result[index].vName}}">
+    <view class='movie-list' wx:for="{{list.result}}"  wx:key="index" wx:if='{{!searchError}}'>
+     <view class='movie-container'>
         <image src="http://47.101.58.51:8080/{{list.result[index].coverImage}}" class='movie-img'></image>
-        <text class='movie-name'>{{list.result[index].vName}}</text>
+        <view>
+          <text class='movie-name'>{{list.result[index].vName}}</text>
+          <!-- <text class='movie-type'  wx:key="index" wx:for="{{list.result[index].vType}}" wx:key="i">{{list.result[index].vType[i]}}</text> -->
+          <view>
+            <text class='movie-type' wx:for="{{testType}}" wx:key="i">恐慌</text>
+          </view>
+        </view>
+        <button class='enter-detailed' bindtap='concreteContent' data-testId="{{list.result[index].vName}}">详细信息</button>
       </view>
     </view>
     <view class='page-choose' wx:if='{{!searchError}}'>
       <button class='{{previousPageClass}}' bindtap='lastPage' wx:if='{{hasPreviousPage}}'>上一页</button>
-      <view wx:for="{{navigatepageNums}}">
+      <view wx:for="{{navigatepageNums}}" wx:key="index">
         <button class='page-text' bindtap='toPage' data-testId="{{item}}">{{item}}</button>
       </view>
       <button class='{{nextPageClass}}' bindtap='nextPage' wx:if='{{hasNextPage}}'>下一页</button>

@@ -22,6 +22,7 @@ Page({
     hideWay:"hideChoose",
     getImg:false,
     getVideo:false,
+    imgIndex:0,
     isRecord:false,
     scoreShow:false,
     scoreComment:"", // 对分数进行评价
@@ -33,6 +34,7 @@ Page({
     hasNextPage: false,
     hasPreviousPage: false,
     pageNum: 1,
+    getTop:'',
     navigatepageNums: [],
     aniFlag:[false,false,false,false,false,false,false,false,false]
   },
@@ -59,8 +61,15 @@ Page({
     },500)
   },
   //让每帧图片窗口跳出
-  getPerImg:function(event){
-    var list = event.currentTarget.dataset.testid;
+  getPerImg: function (event) {
+    let index = event.currentTarget.dataset.testid
+    let top=200+260*parseInt(index+1);
+    this.setData({
+      getTop:top,
+      aniFlag: [false, false, false, false, false, false, false, false, false]
+    })
+    
+    let list =this.data.list.result[index];
     let img=list.image;
     let imgArr=img.split('/');
     let num=imgArr[imgArr.length-1].split('.');
@@ -71,8 +80,10 @@ Page({
     this.setData({
       getImg: true,
       frontImg:fImg,
-      behindImg:bImg
-    })
+      behindImg:bImg,
+      imgIndex: index
+    });
+    this.goScrolltop();
   }, 
   //让视频窗口跳出
   getRealVideo: function (event) {
@@ -82,7 +93,7 @@ Page({
     })
     let that=this;
     wx.vrequest({
-      url: 'http://47.101.58.51:8080/getVideo',
+      url: 'http://localhost:8090/getVideo',
       method: 'POST',
       dataType: 'json',
       data: `vName=${list.vName}&time=${list.sTime}`,
@@ -100,11 +111,22 @@ Page({
   },
   //关闭跳出来的窗口
   closeWindow:function(){
+    let flag=false;
+    if(this.data.getImg){
+      flag=true;
+    }
     this.setData({
       getImg:false,
       getVideo: false,
       scoreShow:false
     })
+    if(flag){
+      console.log(this.data.getTop); 
+      wx.pageScrollTo({
+        scrollTop: this.data.getTop,
+        duration: 0
+      })
+    }
   },
   //上一页
   lastPage: function () {
@@ -160,11 +182,14 @@ Page({
   // 结束录音
   endRecord: function () {
     manager.stop();
-    this.setData({
-      isRecord: false,
-      scoreShow: true
-    })
-    this.commentScore()
+    let that=this;
+    setTimeout(function () {
+      that.setData({
+        isRecord: false,
+        scoreShow: true
+      })
+      this.commentScore()
+    },700)
   },
   // 评价分数
   commentScore:function(){
@@ -235,7 +260,7 @@ Page({
     });
     //使用上个页面传过来的搜索字符串进行请求
     wx.vrequest({
-      url: 'http://47.101.58.51:8080/subtitles',
+      url: 'http://localhost:8090/subtitles',
       method: 'POST',
       dataType: 'json',
       data: data,

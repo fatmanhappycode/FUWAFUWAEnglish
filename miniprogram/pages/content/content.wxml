@@ -2,9 +2,19 @@
   <text class='top-title'>SubtitleSearch</text>
   <text class='search-title'>{{searchTitle}}</text>
   <text class='search-translate'>{{translateTitle}}</text>
-  <view>
-    <view wx:for="{{list.result}}" class='movie-content'>
-      <view class='per-paragraph'>
+  <!-- 每帧图片窗口 -->
+      <view class='per-image' wx:if="{{getImg}}">
+        <text class='movie-name'></text>
+        <view>
+          <image src='http://47.101.58.51:8080/{{frontImg}}'></image>
+          <image src='http://47.101.58.51:8080/{{list.result[imgIndex].image}}'></image>
+          <image src='http://47.101.58.51:8080/{{behindImg}}'></image>
+        </view>
+        <text class='close-window' catchtap='closeWindow'>X</text>
+      </view>
+  <view  wx:if="{{!getImg}}">
+    <view wx:for="{{list.result}}" wx:key="index" class='movie-content'>
+      <view class='per-paragraph' id='query{{index}}'>
         <view catchtap='chooseWay' class='img-container' data-testId="{{index}}">
           <view class='info-view {{showStatus}}'  wx:if='{{aniFlag[index]}}'>
             <view>第{{list.result[index].vEpisode}}集 {{list.result[index].sTime}}</view>
@@ -13,22 +23,22 @@
           </view>
           <image class='movie-img' src='http://47.101.58.51:8080/{{list.result[index].image}}'></image>
           <view class='handle-view {{showStatus}}' wx:if='{{aniFlag[index]}}'>
-            <text class='icon-image' catchtap='getPerImg' data-testId="{{list.result[index]}}"></text>
-            <text class='icon-film' catchtap='getRealVideo' data-testId="{{list.result[index]}}"></text>
+            <image src='../../img/img.png' class='chooseWayImg' catchtap='getPerImg' data-testId="{{index}}"></image>
+            <image src='../../img/video.png' class='chooseWayImg'  catchtap='getRealVideo' data-testId="{{list.result[index]}}"></image>
           </view>
         </view>
         <view class='text-view'>
           <text class='movie-text'>{{list.result[index].sSubtitleZh}}</text>
           <text class='movie-text'>{{list.result[index].sSubtitleEn}}</text>
-          <button class='icon-microphone' bindtouchstart='startRecord' bindtouchend='endRecord' data-testId="{{list[index].sSubtitleEn}}">长按英文跟读评分</button>
+          <button class='microphone' bindtouchstart='startRecord' bindtouchend='endRecord' data-testId="{{list.result[index].sSubtitleEn}}">长按英文跟读评分</button>
         </view>
       </view>
     </view>
 
 <!-- 页数选择 -->
-    <view class='page-choose'>
+    <view class='page-choose'  wx:if="{{!getImg}}">
       <button class='{{previousPageClass}}' bindtap='lastPage' wx:if='{{hasPreviousPage}}'>上一页</button>
-      <view wx:for="{{navigatepageNums}}">
+      <view wx:for="{{navigatepageNums}}" wx:key="index">
         <button class='page-text' bindtap='toPage' data-testId="{{item}}">{{item}}</button>
       </view>
       <button class='{{nextPageClass}}' bindtap='nextPage' wx:if='{{hasNextPage}}'>下一页</button>
@@ -36,20 +46,8 @@
 
 
 
-  <view class='window-container' wx:if="{{getImg||getVideo}}" catchtouchmove='true'>
 
-      <!-- 每帧图片窗口 -->
-      <view class='per-image out-window' wx:if="{{getImg}}">
-        <text class='movie-name'></text>
-        <view wx:for="{{list.result}}">
-          <image src='http://47.101.58.51:8080/{{frontImg}}'></image>
-          <image src='http://47.101.58.51:8080/{{list.result[index].image}}'></image>
-          <image src='http://47.101.58.51:8080/{{behindImg}}'></image>
-          <text class='text-zh'>{{list.result[index].sSubtitleZh}}</text>
-          <text class='text-en'>{{list.result[index].sSubtitleEn}}</text>
-        </view>
-        <text class='close-window' catchtap='closeWindow'>X</text>
-      </view>
+      
 
       <!-- 视频窗口 -->
       <view class='per-video out-window' wx:if="{{getVideo}}">
@@ -59,12 +57,11 @@
       </view>
   </view>
 
-  </view>
 
 
       <!-- 录音窗口 -->
       <view class='recording out-window' wx:if="{{isRecord}}">
-        <text class='icon-microphone recording-icon'></text>
+        <image src='../../img/sound.png' ></image>
         <text class='in-recording'>{{recordStatus}}</text>
       </view>
 

@@ -3,6 +3,7 @@ const util = require('../../utils/util.js')
 
 Page({
   data: {
+    testType:['恐怖', '搞笑', '科幻'],
     logs: [],
     searchTip:'输入你想到的台词',
     searchInfo:'正在搜索中',
@@ -21,15 +22,12 @@ Page({
     hasPreviousPage:false,
     hasNextPage:false,
     searchError:false,
-    list:{"result":[
-      {
-        
-    }
-    ]
-    },
+    list:{},
     previousPageClass:"page-btn",
     nextPageClass:"page-btn",
-    navigatepageNums:[]
+    navigatepageNums:[],
+    searching:false, // 是否显示搜索框
+    searchChoose:[] // 搜索下拉可选内容
   },
   //显示下拉
   showType:function(){
@@ -46,12 +44,13 @@ Page({
       inputStatus: "input-down"
     })
   },
-  //隐藏下拉
+  //隐藏下拉和提示搜索
   hideList:function(){
     this.setData({
       typeShow:false,
       languageShow: false,
-      inputStatus: "input-up"
+      inputStatus: "input-up",
+      searching:false
     })
   },
   //改变按钮名称
@@ -74,6 +73,40 @@ Page({
     this.setData({
       searchWord:e.detail.value
     })
+    var language;
+    if (this.data.languageBtn == '英语') {
+      language = "En"
+    } else {
+      language = "Zh"
+    }
+    let that=this;
+    wx.vrequest({
+      url: 'http://47.101.58.51:8080/getHint',
+      method: 'POST',
+      dataType: 'json',
+      data: `searchTitle=${this.data.searchWord}&lang=${language}`,
+      header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      success: function (res) {
+        console.log(res);
+        that.setData({
+          searchChoose:res.data.extend.result,
+          searching:true
+        })
+      }
+    });
+  },
+  // 按下提示搜索
+  searchByTip:function(event){
+    var word = event.currentTarget.dataset.testid;
+    console.log(word);
+    this.setData({
+      searchWord: word,
+      searching: false,
+      isSearch:true
+    })
+    this.requestByPost(1);
   },
   //发起post请求
   requestByPost:function(page){
@@ -96,7 +129,6 @@ Page({
       url: 'http://47.101.58.51:8080/videos',
       method: 'POST',
       dataType: 'json',
-      // data: 'searchTitle=' + that.data.searchWord + '&pn=' + that.data.page + '&lang=' + language + '&videoType=' + that.data.typeBtn == "影片类型" ? "" : that.data.typeBtn,
       data:data,
       header: {
         'Content-Type': 'application/x-www-form-urlencoded'

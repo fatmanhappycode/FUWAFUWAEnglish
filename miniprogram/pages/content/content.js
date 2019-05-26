@@ -275,7 +275,6 @@ Page({
           pageNum: res.pageNum,
           navigatepageNums: res.navigatepageNums
         })
-
       }
     });
   },
@@ -285,7 +284,7 @@ Page({
       //打印识别结果
       console.log(res);
       that.setData({
-        score: res.SuggestedScore
+        score: Math.floor(res.SuggestedScore)
       })
     });
 

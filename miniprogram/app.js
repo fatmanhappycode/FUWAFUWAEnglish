@@ -1,5 +1,4 @@
 //app.js
-require('./utils/v-request.js')
 wx.setNavigationBarTitle({
   title: ''
 })

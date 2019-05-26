@@ -72,11 +72,16 @@
 
 .search-tip text{
   display: inline-block;
-  border: 1px solid #000;
-  width: 225px;
+  border: 1px solid rgba(0,0,0,.6);
+  width: 424rpx;
+  margin-bottom:-3rpx;
+  padding:8rpx 0rpx;
+  text-indent:8rpx;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  background-color: #fff;
+
 }
 
 .no-search{
@@ -119,7 +124,7 @@
   flex-direction: row;
   height:160rpx;
   padding:10px 0.5px;
-  border-bottom:1rpx solid rgba(102,102,102,0.5);
+  border-bottom:0.1rpx solid rgba(102,102,102,0.2);
 }
 
 .movie-img{

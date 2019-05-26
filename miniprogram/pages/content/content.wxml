@@ -1,5 +1,4 @@
 <view class="container" bindtap='hideWay'>
-  <text class='top-title'>SubtitleSearch</text>
   <text class='search-title'>{{searchTitle}}</text>
   <text class='search-translate'>{{translateTitle}}</text>
   <!-- 每帧图片窗口 -->
@@ -51,7 +50,6 @@
 
       <!-- 视频窗口 -->
       <view class='per-video out-window' wx:if="{{getVideo}}">
-        <text class='movie-name'>{{vName}}</text>
         <video src='https://www.subtitlesearch.xyz/{{vUrl}}'></video>
         <text class='close-window' catchtap='closeWindow'>X</text>
       </view>

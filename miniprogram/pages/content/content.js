@@ -94,7 +94,10 @@ Page({
     let that=this;
     wx.request({
       url: 'https://www.subtitlesearch.xyz/getVideo',
-      data: `vName=${list.vName}&time=${list.sTime}`,
+      data:{
+        vName:list.vName,
+        time:list.sTime
+      },
       success: function (res) {
         console.log(res);
         that.setData({
@@ -210,13 +213,12 @@ Page({
   wordsRequest: function (word){
     let that = this;
     console.log('danci');
-    wx.vrequest({
-      url: 'http://dict-co.iciba.com/api/dictionary.php?key=32B25A29CBE2D70D4E1DA12036763605',
-      method: 'POST',
-      dataType: 'json',
-      data: 'type=json&w=' + word ,
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+    wx.request({
+      url: 'http://dict-co.iciba.com/api/dictionary.php',
+      data:{
+        type:'json',
+        w:word,
+        key: '32B25A29CBE2D70D4E1DA12036763605'
       },
       success: function (res) {
         console.log(res)
@@ -232,11 +234,10 @@ Page({
     console.log('juzi');
     wx.vrequest({
       url: 'http://fanyi.youdao.com/translate',
-      method: 'POST',
-      dataType: 'json',
-      data: 'doctype=json&type=AUTO&i=' + str,
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+      data:{
+        doctype:'json',
+        type:'AUTO',
+        i:str
       },
       success: function (res) {
         console.log(res)
@@ -249,14 +250,18 @@ Page({
   //请求页面数据
   requestByPost: function (pn) {
     let that = this;
-    let data = `searchTitle=${this.data.searchTitle}&pn=${pn}&vName=${this.data.vName}&lang=${this.data.lang}`;
     this.setData({
       pageNum:pn
     });
     //使用上个页面传过来的搜索字符串进行请求
     wx.request({
       url: 'https://www.subtitlesearch.xyz/subtitles',
-      data: data,
+      data: {
+        searchTitle:that.data.searchTitle,
+        pn:pn,
+        vName:that.data.vName,
+        lang:that.data.lang
+      },
       success: function (res) {
         console.log(res)
         res = res.data.extend.result;

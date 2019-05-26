@@ -10,7 +10,6 @@ Page({
     languageList:['英语','中文'],
     languageShow:false,
     languageBtn:"中文",
-    inputStatus:"input-down",
     searchWord:"",
     isSearch:false, // 是否已经按下搜索
     count:0,
@@ -61,7 +60,10 @@ Page({
     let that=this;
     wx.request({
       url: 'https://www.subtitlesearch.xyz/getHint',
-      data: `searchTitle=${this.data.searchWord}&lang=${language}`,
+      data:{
+        searchTitle:that.data.searchWord,
+        lang:language
+      }, 
       success: function (res) {
         console.log(res);
         that.setData({
@@ -97,15 +99,13 @@ Page({
       language = "Zh"
     }
     let that=this;
-    let data = `searchTitle=${this.data.searchWord}&pn=${this.data.page}&lang=${language}&videoType=${this.data.typeBtn == "影片类型" ? "" : this.data.typeBtn}`
-    console.log(data)
     wx.request({
       url: 'https://www.subtitlesearch.xyz/videos',
       data:{
-        searchTitle: "我",
-        lang: "Zh",
+        searchTitle: that.data.searchWord,
+        lang: language,
         videoType:"",
-        pn:"1"
+        pn: that.data.page
       },
       success: function (response) {
         console.log(response)

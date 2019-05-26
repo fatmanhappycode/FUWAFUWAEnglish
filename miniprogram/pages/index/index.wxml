@@ -1,10 +1,12 @@
 <!--logs.wxml-->
 <view class="container" bindtap="hideList">
-  <text class='top-title'>SubtitleSearch</text>
+  <view class='topBg'></view>
+  <text class='top-text'>FUWAFUWA</text>
+  <text class='top-text top-title'>English</text>
 
  
 
-  <view class='search-view {{inputStatus}}'>
+  <view class='search-view'>
    <view class='choose-view'>
     <view class="click-list">
       <button class='type-choose' catchtap="showLanguage">{{languageBtn}}</button>
@@ -16,10 +18,12 @@
     </view>
 
 </view>
+  <view class='search-border'>
     <input  placeholder='{{searchTip}}' class='input' bindinput='inputStr'></input>
-    <button class='search-btn' bindtap='searchMovie'>搜索</button>
+    <image class='search-btn' bindtap='searchMovie' src='../../img/search.png'></image>
     <view class='search-tip' wx:if='{{searching}}' >
       <text wx:for="{{searchChoose}}" wx:key="index" bindtap='searchByTip' data-testId="{{searchChoose[index]}}">{{searchChoose[index]}}</text>
+    </view>
     </view>
   </view>
 
@@ -34,11 +38,10 @@
     <view class='movie-list' wx:for="{{list.result}}"  wx:key="index" wx:if='{{!searchError}}'>
      <view class='movie-container'>
         <image src="https://www.subtitlesearch.xyz/{{list.result[index].coverImage}}" class='movie-img'></image>
-        <view>
+        <view class='text-container'>
           <text class='movie-name'>{{list.result[index].vName}}</text>
-          <!-- <text class='movie-type'  wx:key="index" wx:for="{{list.result[index].vType}}" wx:key="i">{{list.result[index].vType[i]}}</text> -->
           <view>
-            <text class='movie-type' wx:for="{{testType}}" wx:key="i">恐慌</text>
+            <text class='movie-type'>{{list.result[index].vType}}</text>
           </view>
         </view>
         <button class='enter-detailed' bindtap='concreteContent' data-testId="{{list.result[index].vName}}">详细信息</button>

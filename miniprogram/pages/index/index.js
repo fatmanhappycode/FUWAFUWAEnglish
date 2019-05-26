@@ -80,14 +80,9 @@ Page({
       language = "Zh"
     }
     let that=this;
-    wx.vrequest({
-      url: 'http://47.101.58.51:8080/getHint',
-      method: 'POST',
-      dataType: 'json',
+    wx.request({
+      url: 'https://www.subtitlesearch.xyz/getHint',
       data: `searchTitle=${this.data.searchWord}&lang=${language}`,
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
       success: function (res) {
         console.log(res);
         that.setData({
@@ -125,13 +120,13 @@ Page({
     let that=this;
     let data = `searchTitle=${this.data.searchWord}&pn=${this.data.page}&lang=${language}&videoType=${this.data.typeBtn == "影片类型" ? "" : this.data.typeBtn}`
     console.log(data)
-    wx.vrequest({
-      url: 'http://47.101.58.51:8080/videos',
-      method: 'POST',
-      dataType: 'json',
-      data:data,
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+    wx.request({
+      url: 'https://www.subtitlesearch.xyz/videos',
+      data:{
+        searchTitle: "我",
+        lang: "Zh",
+        videoType:"",
+        pn:"1"
       },
       success: function (response) {
         console.log(response)

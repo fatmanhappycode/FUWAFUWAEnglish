@@ -6,9 +6,9 @@
       <view class='per-image' wx:if="{{getImg}}">
         <text class='movie-name'></text>
         <view>
-          <image src='http://47.101.58.51:8080/{{frontImg}}'></image>
-          <image src='http://47.101.58.51:8080/{{list.result[imgIndex].image}}'></image>
-          <image src='http://47.101.58.51:8080/{{behindImg}}'></image>
+          <image src='https://www.subtitlesearch.xyz/{{frontImg}}'></image>
+          <image src='https://www.subtitlesearch.xyz/{{list.result[imgIndex].image}}'></image>
+          <image src='https://www.subtitlesearch.xyz/{{behindImg}}'></image>
         </view>
         <text class='close-window' catchtap='closeWindow'>X</text>
       </view>
@@ -21,7 +21,7 @@
             
             <view>{{vName}}</view>
           </view>
-          <image class='movie-img' src='http://47.101.58.51:8080/{{list.result[index].image}}'></image>
+          <image class='movie-img' src='https://www.subtitlesearch.xyz/{{list.result[index].image}}'></image>
           <view class='handle-view {{showStatus}}' wx:if='{{aniFlag[index]}}'>
             <image src='../../img/img.png' class='chooseWayImg' catchtap='getPerImg' data-testId="{{index}}"></image>
             <image src='../../img/video.png' class='chooseWayImg'  catchtap='getRealVideo' data-testId="{{list.result[index]}}"></image>
@@ -52,7 +52,7 @@
       <!-- 视频窗口 -->
       <view class='per-video out-window' wx:if="{{getVideo}}">
         <text class='movie-name'>{{vName}}</text>
-        <video src='http://47.101.58.51:8080/{{vUrl}}'></video>
+        <video src='https://www.subtitlesearch.xyz/{{vUrl}}'></video>
         <text class='close-window' catchtap='closeWindow'>X</text>
       </view>
   </view>

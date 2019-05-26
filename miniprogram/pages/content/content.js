@@ -92,14 +92,9 @@ Page({
       getVideo: true
     })
     let that=this;
-    wx.vrequest({
-      url: 'http://localhost:8090/getVideo',
-      method: 'POST',
-      dataType: 'json',
+    wx.request({
+      url: 'https://www.subtitlesearch.xyz/getVideo',
       data: `vName=${list.vName}&time=${list.sTime}`,
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
       success: function (res) {
         console.log(res);
         that.setData({
@@ -259,14 +254,9 @@ Page({
       pageNum:pn
     });
     //使用上个页面传过来的搜索字符串进行请求
-    wx.vrequest({
-      url: 'http://localhost:8090/subtitles',
-      method: 'POST',
-      dataType: 'json',
+    wx.request({
+      url: 'https://www.subtitlesearch.xyz/subtitles',
       data: data,
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
       success: function (res) {
         console.log(res)
         res = res.data.extend.result;

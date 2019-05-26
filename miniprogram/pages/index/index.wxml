@@ -33,7 +33,7 @@
     </view>
     <view class='movie-list' wx:for="{{list.result}}"  wx:key="index" wx:if='{{!searchError}}'>
      <view class='movie-container'>
-        <image src="http://47.101.58.51:8080/{{list.result[index].coverImage}}" class='movie-img'></image>
+        <image src="https://www.subtitlesearch.xyz/{{list.result[index].coverImage}}" class='movie-img'></image>
         <view>
           <text class='movie-name'>{{list.result[index].vName}}</text>
           <!-- <text class='movie-type'  wx:key="index" wx:for="{{list.result[index].vType}}" wx:key="i">{{list.result[index].vType[i]}}</text> -->

@@ -12,7 +12,7 @@
   "sitemapLocation": "sitemap.json",
   "plugins": {
     "myPlugin": {
-      "version": "1.1.1",
+      "version": "1.1.3",
       "provider": "wxe5a00a1780c8eb95"
     }
   }

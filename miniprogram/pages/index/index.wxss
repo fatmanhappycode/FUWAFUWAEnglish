@@ -81,7 +81,7 @@
   white-space: nowrap;
   overflow: hidden;
   background-color: #fff;
-
+  z-index:2;
 }
 
 .no-search{
@@ -130,7 +130,7 @@
 .movie-img{
   width: 123rpx;
   height: 150rpx;
-  margin-left: 20rpx;
+  margin-left: 39rpx;
   border: 6rpx double black;
 }
 

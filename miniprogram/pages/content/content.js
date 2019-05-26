@@ -25,7 +25,6 @@ Page({
     imgIndex:0,
     isRecord:false,
     scoreShow:false,
-    scoreComment:"", // 对分数进行评价
     score:0,
     recordStatus: "正在录音", // 录音状态
     recodePath: "", // 录音存放路径
@@ -36,7 +35,8 @@ Page({
     pageNum: 1,
     getTop:'',
     navigatepageNums: [],
-    aniFlag:[false,false,false,false,false,false,false,false,false]
+    aniFlag:[false,false,false,false,false,false,false,false,false],
+    loadFinish:false
   },
   //点击跳出图片和视频图标提供选择
   chooseWay:function(event){
@@ -51,7 +51,8 @@ Page({
   //再点一次关闭图片和视频图标选择
   hideWay: function () {
     this.setData({
-      showStatus: this.data.hideWay
+      showStatus: this.data.hideWay,
+      scoreShow:false
     });
     let that=this;
     setTimeout(function(){
@@ -100,9 +101,7 @@ Page({
       },
       success: function (res) {
         console.log(res);
-        that.setData({
-          vUrl:res.data.extend.result
-        })
+        that.loadVideo('https://www.subtitlesearch.xyz/'+res.data.extend.result)
       }
     });
 
@@ -116,7 +115,8 @@ Page({
     this.setData({
       getImg:false,
       getVideo: false,
-      scoreShow:false
+      scoreShow:false,
+      loadFinish:false
     })
     if(flag){
       console.log(this.data.getTop); 
@@ -168,7 +168,8 @@ Page({
   startRecord: function (event) {
     this.setData({
       isRecord: true,
-      recordStatus: "正在录音"
+      recordStatus: "正在录音",
+      scoreShow:false
     })
     let content = event.currentTarget.dataset.testid;
     console.log('content   :    '+content)
@@ -179,34 +180,36 @@ Page({
   },
   // 结束录音
   endRecord: function () {
+    this.setData({
+      recordStatus:'录音结束'
+    })
     manager.stop();
     let that=this;
     setTimeout(function () {
       that.setData({
         isRecord: false,
-        scoreShow: true
+        scoreShow: true,
+        recordStatus:'正在录音'
       })
-      this.commentScore()
     },700)
   },
-  // 评价分数
-  commentScore:function(){
-    var score=this.data.score
-    var commend=""
-    if(score<60){
-      commend="你说什么风太大我听不清"
-    }
-    else if(score>=60&&score<80){
-      commend="你的中文发音挺好"
-    }
-    else if(score>=80&&score<90){
-      commend="你是不是很有钱经常去美国"
-    }
-    else{
-      commend="你是假的中国人吧"
-    }
-    this.setData({
-      scoreComment:commend
+  loadVideo:function(url){
+    let that=this;
+    wx:wx.request({
+      url: url,
+      success: function (res) {
+        console.log(url);
+        that.setData({
+          vUrl: url,
+          loadFinish:true
+        }
+      )},
+      fail: function(res) {
+        setTimeout(function(){
+          console.log(url)
+          that.loadVideo(url);
+        },500);
+      }
     })
   },
   // 单词请求音标
@@ -214,7 +217,7 @@ Page({
     let that = this;
     console.log('danci');
     wx.request({
-      url: 'http://dict-co.iciba.com/api/dictionary.php',
+      url: 'https://dict-co.iciba.com/api/dictionary.php',
       data:{
         type:'json',
         w:word,
@@ -232,8 +235,8 @@ Page({
   sentenceRequest: function (str){
     let that=this;
     console.log('juzi');
-    wx.vrequest({
-      url: 'http://fanyi.youdao.com/translate',
+    wx.request({
+      url: 'https://fanyi.youdao.com/translate',
       data:{
         doctype:'json',
         type:'AUTO',

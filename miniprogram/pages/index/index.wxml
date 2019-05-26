@@ -19,7 +19,7 @@
 
 </view>
   <view class='search-border'>
-    <input  placeholder='{{searchTip}}' class='input' bindinput='inputStr'></input>
+    <input  placeholder='{{searchTip}}' class='input' bindinput='inputStr' value="{{searchWord}}"></input>
     <image class='search-btn' bindtap='searchMovie' src='../../img/search.png'></image>
     <view class='search-tip' wx:if='{{searching}}' >
       <text wx:for="{{searchChoose}}" wx:key="index" bindtap='searchByTip' data-testId="{{searchChoose[index]}}">{{searchChoose[index]}}</text>

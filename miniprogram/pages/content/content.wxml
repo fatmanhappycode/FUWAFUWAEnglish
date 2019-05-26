@@ -1,6 +1,8 @@
-<view class="container" bindtap='hideWay'>
-  <text class='search-title'>{{searchTitle}}</text>
-  <text class='search-translate'>{{translateTitle}}</text>
+<view class="container" catchtap='hideWay'>
+  <view class='search-word'  wx:if="{{lang=='En'}}">
+    <text class='search-title'>{{searchTitle}}</text>
+    <text class='search-translate'>{{translateTitle}}</text>
+  </view>
   <!-- 每帧图片窗口 -->
       <view class='per-image' wx:if="{{getImg}}">
         <text class='movie-name'></text>
@@ -11,14 +13,14 @@
         </view>
         <text class='close-window' catchtap='closeWindow'>X</text>
       </view>
-  <view  wx:if="{{!getImg}}">
+
+  <view class='list-container'  wx:if="{{!getImg}}">
     <view wx:for="{{list.result}}" wx:key="index" class='movie-content'>
       <view class='per-paragraph' id='query{{index}}'>
         <view catchtap='chooseWay' class='img-container' data-testId="{{index}}">
           <view class='info-view {{showStatus}}'  wx:if='{{aniFlag[index]}}'>
-            <view>第{{list.result[index].vEpisode}}集 {{list.result[index].sTime}}</view>
-            
-            <view>{{vName}}</view>
+            <view class='movie-episode'>第{{list.result[index].vEpisode}}集 {{list.result[index].sTime}}</view>
+            <view class='movie-vname'>{{vName}}</view>
           </view>
           <image class='movie-img' src='https://www.subtitlesearch.xyz/{{list.result[index].image}}'></image>
           <view class='handle-view {{showStatus}}' wx:if='{{aniFlag[index]}}'>
@@ -36,11 +38,11 @@
 
 <!-- 页数选择 -->
     <view class='page-choose'  wx:if="{{!getImg}}">
-      <button class='{{previousPageClass}}' bindtap='lastPage' wx:if='{{hasPreviousPage}}'>上一页</button>
+      <button class='turnPage' bindtap='lastPage' wx:if='{{hasPreviousPage}}'>上一页</button>
       <view wx:for="{{navigatepageNums}}" wx:key="index">
         <button class='page-text' bindtap='toPage' data-testId="{{item}}">{{item}}</button>
       </view>
-      <button class='{{nextPageClass}}' bindtap='nextPage' wx:if='{{hasNextPage}}'>下一页</button>
+      <button class='turnPage' bindtap='nextPage' wx:if='{{hasNextPage}}'>下一页</button>
     </view>
 
 
@@ -50,7 +52,8 @@
 
       <!-- 视频窗口 -->
       <view class='per-video out-window' wx:if="{{getVideo}}">
-        <video src='https://www.subtitlesearch.xyz/{{vUrl}}'></video>
+        <text class='loadTip' wx:if="{{!loadFinish}}">视频加载中</text>
+        <video wx:if="{{loadFinish}}" src='{{vUrl}}'></video>
         <text class='close-window' catchtap='closeWindow'>X</text>
       </view>
   </view>
@@ -59,15 +62,12 @@
 
       <!-- 录音窗口 -->
       <view class='recording out-window' wx:if="{{isRecord}}">
-        <image src='../../img/sound.png' ></image>
+        <image class='record-img' src='../../img/sound.png' ></image>
         <text class='in-recording'>{{recordStatus}}</text>
       </view>
 
       <!-- 评分窗口 -->
       <view class='grading out-window' wx:if="{{scoreShow}}">
         <text class='gradingScore'>你的分数是{{score}}</text>
-        <text>{{scoreComment}}</text>
-        <text class='close-window' catchtap='closeWindow'></text>
-        <text class='close-window' catchtap='closeWindow'>X</text>
       </view>
 </view>

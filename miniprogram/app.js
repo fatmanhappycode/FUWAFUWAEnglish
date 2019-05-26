@@ -1,5 +1,8 @@
 //app.js
 require('./utils/v-request.js')
+wx.setNavigationBarTitle({
+  title: 'SubtitleSearch'
+})
 App({
   onLaunch: function () {
     if (!wx.cloud) {

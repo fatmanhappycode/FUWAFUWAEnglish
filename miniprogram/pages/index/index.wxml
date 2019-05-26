@@ -2,17 +2,10 @@
 <view class="container" bindtap="hideList">
   <text class='top-title'>SubtitleSearch</text>
 
-  <view class='choose-view'>
+ 
 
-    <view class="click-list">
-      <button class='type-choose' catchtap="showType">{{typeBtn}}</button>
-      <view class="show-list">
-        <view  wx:if="{{typeShow}}" wx:for="{{typeList}}" wx:key="index">
-          <text class='list-content' catchtap="typeChange" data-testId="{{item}}">{{item}}</text>
-        </view>
-      </view>
-    </view>
-
+  <view class='search-view {{inputStatus}}'>
+   <view class='choose-view'>
     <view class="click-list">
       <button class='type-choose' catchtap="showLanguage">{{languageBtn}}</button>
       <view class="show-list">
@@ -23,8 +16,6 @@
     </view>
 
 </view>
-
-  <view class='search-view {{inputStatus}}'>
     <input  placeholder='{{searchTip}}' class='input' bindinput='inputStr'></input>
     <button class='search-btn' bindtap='searchMovie'>搜索</button>
     <view class='search-tip' wx:if='{{searching}}' >
@@ -36,6 +27,7 @@
 
 <!-- 搜索得到的电影列表 -->
   <view class='search-list'  wx:if="{{isSearch}}">
+  
     <view class='no-search' wx:if='{{searchError}}'>
       {{searchInfo}}
     </view>

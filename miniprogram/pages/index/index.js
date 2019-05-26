@@ -7,11 +7,8 @@ Page({
     logs: [],
     searchTip:'输入你想到的台词',
     searchInfo:'正在搜索中',
-    typeList:['无','剧情','爱情','动作','科幻','悬疑','惊悚'],
     languageList:['英语','中文'],
-    typeShow:false,
     languageShow:false,
-    typeBtn:"影片类型",
     languageBtn:"中文",
     inputStatus:"input-down",
     searchWord:"",
@@ -29,36 +26,18 @@ Page({
     searching:false, // 是否显示搜索框
     searchChoose:[] // 搜索下拉可选内容
   },
-  //显示下拉
-  showType:function(){
-    this.setData({
-      typeShow: true,
-      languageShow: false,
-      inputStatus: "input-down"
-    })
-  },
   showLanguage:function(){
     this.setData({
       languageShow: true,
-      typeShow: false,
       inputStatus: "input-down"
     })
   },
   //隐藏下拉和提示搜索
   hideList:function(){
     this.setData({
-      typeShow:false,
       languageShow: false,
       inputStatus: "input-up",
       searching:false
-    })
-  },
-  //改变按钮名称
-  typeChange: function (event) {
-    var content = event.currentTarget.dataset.testid;
-    this.setData({
-      typeBtn: content,
-      typeShow: false
     })
   },
   languageChange:function(event){

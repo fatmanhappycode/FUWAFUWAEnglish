@@ -1,6 +1,7 @@
 <view class="container" catchtap='hideWay'>
   <view class='search-word'  wx:if="{{lang=='En'}}">
     <text class='search-title'>{{searchTitle}}</text>
+    <text>{{wordSymbol}}</text>
     <text class='search-translate'>{{translateTitle}}</text>
   </view>
   <!-- 每帧图片窗口 -->

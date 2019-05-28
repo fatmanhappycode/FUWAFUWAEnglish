@@ -14,6 +14,7 @@ Page({
       sSubtitleZh:'这里',
       sSubtitleEn:'here',
       vName:"",
+      wordSymbol:"",
       sTime:"", // 播放时间点
       vEpisode:"" // 播放集数
     }],
@@ -226,7 +227,8 @@ Page({
       success: function (res) {
         console.log(res)
         that.setData({
-          translateTitle:res.data.symbols[0].ph_en
+          wordSymbol: res.data.symbols[0].ph_en,
+          translateTitle:res.data.symbols[0].parts[0].means[0]
         })
       }
     })

@@ -3,7 +3,6 @@ const util = require('../../utils/util.js')
 
 Page({
   data: {
-    testType:['恐怖', '搞笑', '科幻'],
     logs: [],
     searchTip:'输入你想到的台词',
     searchInfo:'正在搜索中',
@@ -12,7 +11,6 @@ Page({
     languageBtn:"中文",
     searchWord:"",
     isSearch:false, // 是否已经按下搜索
-    count:0,
     page:1,
     totalPage:1,
     hasPreviousPage:false,
@@ -65,7 +63,6 @@ Page({
         lang:language
       }, 
       success: function (res) {
-        console.log(res);
         that.setData({
           searchChoose:res.data.extend.result,
           searching:true
@@ -76,7 +73,6 @@ Page({
   // 按下提示搜索
   searchByTip:function(event){
     var word = event.currentTarget.dataset.testid;
-    console.log(word);
     this.setData({
       searchWord: word,
       searching: false,
@@ -108,7 +104,6 @@ Page({
         pn: that.data.page
       },
       success: function (response) {
-        console.log(response)
         let res = response.data.extend.result;
         that.setData({
           searchError: true,
@@ -119,7 +114,6 @@ Page({
           hasPreviousPage: res.hasPreviousPage,
         })
         setTimeout(function () {
-          console.log(res.total)
           if(res.total>0){
               that.setData({
                 searchError: false

@@ -9,15 +9,7 @@ Page({
     translateTitle:"", // 翻译后的内容，音标或者翻译
     lang:"",
     vUrl:"", // 要播放视频的url
-    list:[{
-      image:"../../img/avtar.jpg",
-      sSubtitleZh:'这里',
-      sSubtitleEn:'here',
-      vName:"",
-      wordSymbol:"",
-      sTime:"", // 播放时间点
-      vEpisode:"" // 播放集数
-    }],
+    list:[],
     showStatus:"",
     showWay:"showChoose",
     hideWay:"hideChoose",
@@ -101,7 +93,6 @@ Page({
         time:list.sTime
       },
       success: function (res) {
-        console.log(res);
         that.loadVideo('https://www.subtitlesearch.xyz/'+res.data.extend.result)
       }
     });
@@ -120,7 +111,6 @@ Page({
       loadFinish:false
     })
     if(flag){
-      console.log(this.data.getTop); 
       wx.pageScrollTo({
         scrollTop: this.data.getTop,
         duration: 0
@@ -173,7 +163,6 @@ Page({
       scoreShow:false
     })
     let content = event.currentTarget.dataset.testid;
-    console.log('content   :    '+content)
     manager.start({
       content: content,
       evalMode: 1
@@ -199,7 +188,6 @@ Page({
     wx:wx.request({
       url: url,
       success: function (res) {
-        console.log(url);
         that.setData({
           vUrl: url,
           loadFinish:true
@@ -207,7 +195,6 @@ Page({
       )},
       fail: function(res) {
         setTimeout(function(){
-          console.log(url)
           that.loadVideo(url);
         },500);
       }
@@ -216,7 +203,6 @@ Page({
   // 单词请求音标
   wordsRequest: function (word){
     let that = this;
-    console.log('danci');
     wx.request({
       url: 'https://dict-co.iciba.com/api/dictionary.php',
       data:{
@@ -225,7 +211,6 @@ Page({
         key: '32B25A29CBE2D70D4E1DA12036763605'
       },
       success: function (res) {
-        console.log(res)
         that.setData({
           wordSymbol: res.data.symbols[0].ph_en,
           translateTitle:res.data.symbols[0].parts[0].means[0]
@@ -236,7 +221,6 @@ Page({
   //句子请求翻译
   sentenceRequest: function (str){
     let that=this;
-    console.log('juzi');
     wx.request({
       url: 'https://fanyi.youdao.com/translate',
       data:{
@@ -245,7 +229,6 @@ Page({
         i:str
       },
       success: function (res) {
-        console.log(res)
         that.setData({
           translateTitle: res.data.translateResult[0][0].tgt
         })
@@ -268,7 +251,6 @@ Page({
         lang:that.data.lang
       },
       success: function (res) {
-        console.log(res)
         res = res.data.extend.result;
         that.setData({
           list: res.list,
@@ -284,7 +266,6 @@ Page({
     let that=this;
     manager.onSuccess((res) => {
       //打印识别结果
-      console.log(res);
       that.setData({
         score: Math.floor(res.SuggestedScore)
       })
